@@ -1,0 +1,27 @@
+<template>
+    <lightning-card title="Weather API">
+        <div class="slds-p-around_medium">
+            <lightning-input
+                label="Search City"
+                value={city}
+                onchange={handleonchange}>
+            </lightning-input>
+            <br/>
+            <lightning-button
+                label="Get Weather"
+                variant="brand"
+                onclick={buttonClick}>
+            </lightning-button>
+            <br/><br/>
+            <template if:true={imageURL}>
+                <img src={imageURL}
+                     alt="Weather Icon"
+                     width="80"
+                     height="80"/>
+            </template>
+            <template if:true={condition}>
+                <h2>{condition}</h2>
+            </template>
+        </div>
+    </lightning-card>
+</template>
