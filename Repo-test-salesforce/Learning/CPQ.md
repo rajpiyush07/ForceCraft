@@ -94,3 +94,29 @@ Option Selection Method
 •	Helps guide users through the configuration process. 
 •	Implemented using Option Constraints and Product Rules.
 
+------------------------------------------------------------------------------------
+
+
+### Option Constraints
+- Learned about **Option Constraints** used to control product option behavior within bundles.
+- **Dependency:** Automatically requires or enables a related product option.
+- **Exclusion:** Prevents incompatible product options from being selected together.
+
+### Twin Fields & Special Fields
+- Learned about **Twin Fields** and how values can be synchronized between related CPQ records.
+- Explored **Special Fields** used for specific CPQ configuration and pricing requirements.
+
+### Product Attributes
+- Learned about **Product Attributes** and their different types.
+- Understood how attributes capture configuration-specific values during product selection.
+
+### Bundled Products
+- Learned how to create and configure **Bundle Products**.
+- Explored product options, configuration rules, and option constraints within bundles.
+
+### Subscription Products
+- Learned how to create and configure **Subscription Products**.
+- Understood how subscription products are carried through the **Quote → Order → Contract** lifecycle.
+
+### CPQ Technical Flow
+- Attended internal meetings to understand and discuss the **Salesforce CPQ technical flow** and its end-to-end process.
