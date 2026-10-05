@@ -118,5 +118,147 @@ Option Selection Method
 - Learned how to create and configure **Subscription Products**.
 - Understood how subscription products are carried through the **Quote → Order → Contract** lifecycle.
 
-### CPQ Technical Flow
-- Attended internal meetings to understand and discuss the **Salesforce CPQ technical flow** and its end-to-end process.
+
+
+---------------------------------------------------------------------------------------
+
+# Salesforce CPQ — Product Rules, Price Methods & MDQ
+
+## Product Rules
+
+Product Rules in Salesforce CPQ are used to control and automate product configuration and pricing behavior during the quoting process.
+
+They help ensure that users select valid product combinations and that business rules are followed while configuring a quote.
+
+### Types of Product Rules
+
+#### 1. Validation Rule
+- Prevents users from saving an invalid configuration.
+- Displays an error message when a specific condition is not satisfied.
+- Example: If Product A is selected, Product B must also be selected.
+
+#### 2. Selection Rule
+- Automatically adds, removes, enables, disables, or hides products/options based on conditions.
+- Useful for automating product selections.
+- Example: Selecting a Laptop automatically adds a required Charger.
+
+#### 3. Filter Rule
+- Controls which products or options are displayed to the user.
+- Helps narrow down available products based on configuration criteria.
+- Example: Show only compatible accessories for a selected product.
+
+#### 4. Alert Rule
+- Displays an informational or warning message to the user.
+- Does not necessarily prevent the user from continuing.
+- Example: Display a message when a premium support package is selected.
+
+### Product Rule Execution
+
+Product Rules can execute during different configuration events such as:
+- Load
+- Add
+- Remove
+- Edit
+- Save
+
+The appropriate event depends on when the business rule needs to be evaluated.
+
+---
+
+# Price Methods
+
+Price Method determines how Salesforce CPQ calculates the price of a product.
+
+### Common Price Methods
+
+#### 1. List Price
+- Uses the product's standard List Price from the Price Book.
+- Example: Product List Price = $1,000.
+
+#### 2. Block Price
+- Price is determined based on a predefined quantity range/block.
+- The customer pays the price associated with the applicable block rather than simply multiplying quantity × unit price.
+
+**Example:**
+
+| Quantity Range | Block Price |
+|---|---:|
+| 1–10 | $500 |
+| 11–20 | $900 |
+| 21–50 | $1,500 |
+
+If the customer purchases 15 units, the applicable block is **11–20**, so the price is **$900**.
+
+### Block Price with Coverage / Quantity Range
+
+In Salesforce CPQ, Block Pricing can be used when a fixed price applies to a defined quantity range.
+
+The important concept is that the block represents a **coverage/quantity range**, and the price is associated with that range.
+
+**Example:**
+
+A support package covers up to 100 users for $2,000.
+
+- 1–100 users → $2,000
+- 101–200 users → $3,500
+- 201–500 users → $6,000
+
+If the customer selects 75 users, the applicable block is **1–100**, so the price is **$2,000**.
+
+This is useful for:
+- Support packages
+- User licenses
+- Service tiers
+- Usage-based offerings
+- Capacity-based pricing
+
+---
+
+# MDQ — Multi-Dimensional Quoting
+
+MDQ stands for **Multi-Dimensional Quoting**.
+
+It allows a subscription product to be divided into multiple time segments, where quantity, discount, and pricing can vary for each segment.
+
+Instead of having one price for the entire subscription term, CPQ allows different values for different periods.
+
+### Example
+
+A 3-year subscription can be divided into:
+
+| Segment | Period | Quantity | Price |
+|---|---|---:|---:|
+| 1 | Year 1 | 10 | $1,000 |
+| 2 | Year 2 | 20 | $1,800 |
+| 3 | Year 3 | 30 | $2,500 |
+
+This allows the business to model expected growth or changes over time.
+
+### MDQ Segmentation
+
+Common segmentation approaches include:
+
+- **Year**
+- **Quarter**
+- **Month**
+
+The segmentation determines how the subscription is divided into separate pricing periods.
+
+### MDQ Use Cases
+
+MDQ is useful when:
+- Customer quantity changes over time.
+- Pricing changes during the subscription term.
+- Discounts vary by period.
+- Business expects gradual user/customer growth.
+- Subscription requirements are different for each period.
+
+### MDQ vs Standard Subscription
+
+**Standard Subscription:**
+- Generally maintains the same quantity/pricing structure throughout the subscription term.
+
+**MDQ Subscription:**
+- Allows different quantities, prices, or discounts for individual time segments.
+
+---
