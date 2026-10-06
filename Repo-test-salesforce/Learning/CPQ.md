@@ -262,3 +262,120 @@ MDQ is useful when:
 - Allows different quantities, prices, or discounts for individual time segments.
 
 ---
+=====================================================================================================================================================================================================================================================================
+
+
+Salesforce CPQ – Pricing, Guided Selling & Discounting
+1. Account Contract Pricing
+Definition
+Account Contract Pricing allows Salesforce CPQ to apply customer-specific pricing based on an account's negotiated contract or pricing agreement.
+Explanation
+It is useful when a customer has a predefined price that is different from the standard product price.
+Example
+- Standard Product Price = $1,000
+- Customer ABC Corp has a negotiated contract price = $850
+- When ABC Corp creates a quote, CPQ can apply the $850 contract price instead of the standard price.
+Use Case
+- Enterprise customer-specific pricing
+- Long-term negotiated contracts
+- Partner/customer agreements
+- Special pricing arrangements
+2. Option Level Pricing
+Definition
+Option Level Pricing controls how the price of an individual product option is calculated when it is added to a bundle.
+Explanation
+In Salesforce CPQ, a bundle can contain multiple options. Each option can have its own pricing behavior depending on the bundle configuration.
+Example
+Suppose we have a Laptop Bundle:
+Product Option	Price
+Laptop	$1,000
+Extra RAM	$100
+Extended Warranty	$150
+
+
+If the customer selects Extra RAM + Extended Warranty, CPQ adds the respective option prices to the bundle based on the configured pricing method.
+Use Case
+- Configurable bundles
+- Optional add-ons
+- Accessories
+- Product upgrades
+3. Guided Selling
+Definition
+Guided Selling is a Salesforce CPQ feature that helps sales users select the right products by asking a series of business-related questions.
+Explanation
+Instead of searching through a large product catalog manually, the sales representative answers questions and CPQ recommends or filters the relevant products.
+Example
+For a software product, CPQ may ask:
+1. How many users do you need?
+   → 100+
+
+2. What type of deployment?
+   → Cloud
+
+3. Required support level?
+   → Premium
+
+Based on these answers, CPQ can display the appropriate products.
+Benefits
+- Simplifies product selection
+- Reduces sales-user errors
+- Speeds up quote creation
+- Helps non-technical users configure complex products
+4. Discount Schedules
+Definition
+A Discount Schedule automatically applies discounts based on criteria such as quantity or subscription term.
+Explanation
+Discount schedules are commonly used when customers receive better pricing for purchasing larger quantities.
+Example
+Quantity	Discount
+1–10	0%
+11–50	5%
+51–100	10%
+101+	15%
+
+
+If the customer purchases 75 units:
+List Price = $100
+Quantity = 75
+Discount = 10%
+
+Discounted Price = $90 per unit
+
+Use Case
+- Volume-based pricing
+- Bulk purchases
+- Tiered discounts
+- Subscription-term discounts
+5. Price Rules
+Definition
+Price Rules are Salesforce CPQ automation rules used to calculate, modify, or populate pricing and other field values during the quoting process.
+Explanation
+Price Rules can evaluate conditions and then update a target field with a specific value.
+Basic flow:
+Condition
+   ↓
+Price Rule
+   ↓
+Price Action
+   ↓
+Update Target Field
+
+Example
+Suppose:
+Product = Premium Support
+Quantity > 100
+
+The Price Rule can automatically apply:
+Discount = 15%
+
+Another example:
+Region = Enterprise
+Product = Software
+
+The Price Rule can populate a specific customer or partner price.
+Main Components
+- Price Rule – Defines the overall pricing logic.
+- Price Conditions – Determine when the rule should execute.
+- Price Actions – Define what value should be changed.
+- Target Field – Field that receives the calculated value.
+- Evaluation Event – Determines when CPQ evaluates the rule.
