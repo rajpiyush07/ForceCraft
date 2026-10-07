@@ -379,3 +379,104 @@ Main Components
 - Price Actions – Define what value should be changed.
 - Target Field – Field that receives the calculated value.
 - Evaluation Event – Determines when CPQ evaluates the rule.
+
+
+
+=====================================================================================================================================================================================================================================================================
+
+
+Salesforce CPQ — Quote Templates, Contracts, Amendments & Renewals
+1. Quote Templates
+A Quote Template in Salesforce CPQ is used to generate professional quote documents using Salesforce CPQ quote and quote line data.
+Key Points
+- Used to generate customer-facing Quote/Proposal documents.
+- Can include Account, Quote, Quote Line, Product, Pricing, Discount, and Terms information.
+- Supports different output formats such as PDF and Word, depending on configuration.
+- Helps standardize the format and branding of customer quotes.
+- Quote templates can contain sections, columns, line items, merge fields, and terms.
+Example
+A sales representative creates a quote containing:
+- Account: ABC Corporation
+- Product: Salesforce License
+- Quantity: 100
+- Discount: 10%
+- Net Price: $50,000
+The Quote Template can generate a professional PDF containing all this information.
+2. Contracts
+A Contract in Salesforce CPQ represents the customer's commercial agreement after a quote is finalized and contracted.
+Key Points
+- A quote can be contracted after the customer accepts the commercial terms.
+- Contracting can create related Subscriptions and Assets, depending on the product configuration.
+- The Contract stores information about the customer's agreement.
+- Contract information can be used for future Amendments and Renewals.
+- Subscription products can contain information such as:
+  - Start Date
+  - End Date
+  - Subscription Term
+  - Quantity
+  - Recurring Price
+Example
+Customer purchases:
+100 Salesforce licenses for 12 months.
+
+After the quote is finalized and contracted:
+Quote → Contract → Subscription
+The subscription represents the customer's active subscription for those licenses.
+3. Amendments
+An Amendment is used when a customer wants to make changes to an existing contract before the contract expires.
+Common amendment scenarios:
+- Increase quantity
+- Decrease quantity
+- Add new products
+- Remove products
+- Change subscription terms
+- Modify subscription quantities
+Example
+Original contract:
+100 licenses for 12 months.
+
+After 6 months, the customer wants:
+150 licenses.
+
+Instead of creating a completely new contract, we can create an Amendment Quote against the existing contract.
+Flow
+Existing Contract
+       ↓
+Create Amendment
+       ↓
+Amendment Quote
+       ↓
+Modify Products / Quantity
+       ↓
+Calculate
+       ↓
+Contract Amendment
+       ↓
+Updated Subscription
+
+4. Renewals
+A Renewal is used when an existing subscription or contract is approaching its expiration date and the customer wants to continue the service.
+Key Points
+- Used to extend an existing subscription.
+- CPQ can create a Renewal Opportunity and Renewal Quote.
+- Existing subscription information can be carried into the renewal.
+- Products and quantities can be reviewed or modified during renewal.
+- Renewal pricing can be affected by CPQ pricing and discount rules.
+Example
+Original contract:
+100 licenses
+Subscription Term: 12 months
+Start Date: Jan 1, 2026
+End Date: Dec 31, 2026
+
+Before expiration, the customer wants to continue for another year.
+CPQ can create:
+Existing Contract
+       ↓
+Renewal Opportunity
+       ↓
+Renewal Quote
+       ↓
+Customer Review
+       ↓
+New Contract / Subscription
