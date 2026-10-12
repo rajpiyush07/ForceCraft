@@ -40,7 +40,9 @@ Started learning different **product pricing methodologies** and how pricing can
 
 
 =====================================================================================================================================================================================================================================================================
-                         09/10
+                    
+                    
+                     09/10/2026
 
 
 
@@ -119,3 +121,166 @@ For example, the Wi-Fi Router option may offer:
 - Premium Router
 
 The available choices depend on the product catalog and configuration rules.
+
+
+=====================================================================================================================================================================================================================================================================
+
+
+                  CHANGES 12/10/2026 
+
+
+# Salesforce Revenue Cloud – Quoting Lifecycle
+
+## 1. Overview
+
+The Salesforce Revenue Cloud Quoting Lifecycle describes the process of creating a quote, selecting products, calculating prices, obtaining approvals, generating orders, and creating assets.
+
+It helps businesses automate the Lead-to-Cash process, manage product pricing, maintain quote accuracy, and streamline the transition from an opportunity to order fulfillment.
+
+## 2. Quoting Lifecycle
+
+The typical quoting process includes the following stages:
+
+1. **Opportunity Creation** – Create an opportunity to track a potential sales deal, including customer requirements and estimated revenue.
+2. **Quote Creation** – Generate a quote associated with the opportunity to present proposed products, pricing, discounts, and commercial terms.
+3. **Product Selection** – Select the required products or services based on customer requirements.
+4. **Pricing and Calculation** – Calculate product prices, apply eligible discounts, and determine the quote totals according to the configured pricing rules.
+5. **Approval Process** – Submit the quote for approval when required, such as when discounts exceed permitted limits.
+6. **Order Creation** – Convert an approved or accepted quote into an order, depending on the configured business process.
+7. **Asset Generation** – Create or update asset records when applicable, representing products or services purchased by the customer.
+
+**Note:** The exact sequence and automation depend on the Revenue Cloud implementation and business configuration.
+
+## 3. Important Pricing and Summary Fields
+
+### 3.1 Grand Total
+
+Grand Total represents the final quote amount, including applicable taxes, fees, and other charges, according to the configured pricing and calculation model.
+
+**Example:** If the quote subtotal is ₹50,000, applicable tax is ₹9,000, and additional fees are ₹1,000, the grand total is ₹60,000.
+
+### 3.2 Subtotal
+
+Subtotal represents the combined value of the quote line items before applicable taxes and additional charges. The precise treatment of discounts depends on the pricing implementation.
+
+**Example:** If three products cost ₹10,000, ₹15,000, and ₹25,000, the subtotal before discounts and taxes is ₹50,000.
+
+### 3.3 Total Price
+
+Total Price represents the calculated price of a quote line or group of line items, depending on the field and quoting implementation.
+
+In a Salesforce CPQ-style pricing waterfall, line-item pricing progresses through list price, discounts, and other adjustments to arrive at the applicable net price.
+
+### 3.4 Discount
+
+A discount reduces the price of a product or quote according to the configured discounting rules.
+
+Discounts can include:
+- Product-level discounts
+- Volume-based discounts
+- Partner or distributor discounts
+- Quote-level discounts
+- Special or negotiated discounts
+
+**Example:** A product costs ₹10,000 and receives a 10% discount. The discounted amount is ₹9,000 before applicable taxes and additional charges.
+
+Quote-level discounts must be evaluated according to the quote's eligibility and allocation rules.
+
+## 4. Metadata and Quote Control Fields
+
+### 4.1 Expiration Date
+
+The Expiration Date defines how long a quote remains valid under the agreed commercial terms.
+
+**Benefits:**
+- Establishes quote validity.
+- Helps sales representatives follow up with customers.
+- Creates urgency for purchasing decisions.
+- Supports quote-expiration management.
+
+### 4.2 Calculation Status
+
+Calculation Status indicates the state of quote pricing calculations, where supported by the quoting system.
+
+Possible states depend on the implementation and may include processing, completed, or error conditions.
+
+**Importance:**
+- Helps identify whether pricing calculations have completed.
+- Supports troubleshooting calculation errors.
+- Helps users verify quote accuracy before submission or approval.
+
+### 4.3 Price Book
+
+A Price Book defines the catalog of products and their associated prices for a particular selling context.
+
+In Salesforce, standard and custom price books can support different pricing requirements.
+
+**Example:** A company may maintain separate price books for domestic and international customers.
+
+**Benefits:**
+- Maintains product pricing information.
+- Supports different selling markets.
+- Helps sales representatives select products with the appropriate prices.
+
+### 4.4 Quote Number
+
+The Quote Number is a unique identifier used to distinguish a quote from other quotes.
+
+**Uses:**
+- Quote identification and tracking.
+- Customer communication.
+- Reporting and record searches.
+- Referencing a quote during approval and order processing.
+
+### 4.5 Is Syncing
+
+In Salesforce CPQ, the `IsSyncing` field indicates whether a quote is synchronized with its associated opportunity.
+
+When a quote is synchronized, supported quote information can be reflected in the opportunity's synchronized fields.
+
+**Importance:**
+- Helps maintain consistency between the quote and opportunity.
+- Supports opportunity revenue and product tracking.
+- Helps users identify the synchronized quote.
+
+## 5. Standard Quote Status Lifecycle
+
+The available statuses and their exact behavior depend on the Salesforce quoting solution and its configuration.
+
+### 5.1 Draft
+
+A quote is being prepared and can generally be edited.
+
+**Example:** A sales representative selects products and adjusts pricing before sharing the quote.
+
+### 5.2 In Review
+
+The quote is undergoing internal review or an approval process.
+
+**Example:** A quote containing a discount above the permitted threshold is submitted for manager approval.
+
+### 5.3 Presented
+
+The quote has been presented or sent to the customer for consideration.
+
+**Example:** The sales representative sends the quote document to the customer.
+
+### 5.4 Accepted
+
+The customer has accepted the quote according to the applicable business process.
+
+**Example:** The customer confirms the proposed products and commercial terms.
+
+Acceptance does not automatically mean an order or contract has been created; that depends on the configured process.
+
+### 5.5 Declined
+
+The customer rejects the proposed quote.
+
+**Example:** The customer does not agree with the proposed price or contract terms.
+
+### 5.6 Expired
+
+The quote has passed its validity period without being accepted or renewed, according to the configured expiration process.
+
+**Example:** A quote expires after 30 days if the customer does not respond.
