@@ -284,3 +284,95 @@ The customer rejects the proposed quote.
 The quote has passed its validity period without being accepted or renewed, according to the configured expiration process.
 
 **Example:** A quote expires after 30 days if the customer does not respond.
+
+
+=====================================================================================================================================================================================================================================================================
+
+
+                   13/10/2026
+
+
+# Salesforce Revenue Cloud – Dynamic Attributes, Product Configuration Rules & Data Interaction Framework
+
+## 1. Dynamic Attributes – Hands-on Practice
+
+### What are Dynamic Attributes?
+
+Dynamic Attributes allow product configuration experiences to display relevant attributes and capture product-specific information based on the configured business requirements.
+
+Instead of relying only on fixed product fields, businesses can use configurable attributes to collect information needed during product selection and configuration.
+
+### Key Concepts
+
+- **Flexible Configuration:** Supports capturing product-specific information during the configuration process.
+- **Attribute Visibility:** Helps present relevant attributes in the product configuration experience.
+- **Business Requirements:** Allows product configuration to collect information based on the product or use case.
+- **Improved User Experience:** Helps users provide the necessary product details without navigating multiple records.
+
+### Example
+
+Consider a company selling laptops with different configuration requirements.
+
+Depending on the product, users may need to provide details such as:
+
+- RAM: 8 GB, 16 GB, or 32 GB
+- Storage: 256 GB, 512 GB, or 1 TB
+- Warranty: Standard or Extended
+
+Dynamic Attributes can support the collection of these configurable values when appropriately set up.
+
+### Learning Outcome
+
+Gained hands-on experience with Dynamic Attributes and understood their role in making product configuration more flexible and user-friendly.
+
+## 2. Product Configuration Rules – Theoretical Understanding
+
+### What are Product Configuration Rules?
+
+Product Configuration Rules define business logic that guides users when selecting and configuring products. They help ensure that the selected products, options, and attribute values satisfy the required configuration conditions.
+
+### Why Are They Important?
+
+- **Configuration Validation:** Helps prevent invalid product configurations.
+- **Product Compatibility:** Supports rules governing which products or options can be selected together.
+- **Business Logic:** Applies product selection requirements during configuration.
+- **Consistency:** Helps maintain valid product combinations across the quoting process.
+
+### Example
+
+Suppose a laptop bundle includes a laptop, memory, storage, and warranty options.
+
+Business requirements may specify that:
+- A high-performance laptop must have at least 16 GB RAM.
+- Certain warranty options are available only for eligible products.
+- Incompatible product options must not be selected together.
+
+Product configuration rules can help enforce these requirements, depending on the capabilities and configuration of the Revenue Cloud implementation.
+
+### Learning Outcome
+
+Understood the purpose of Product Configuration Rules and how they support valid product selection, compatibility, and business-driven configuration.
+
+## 3. Data Interaction Framework – Theoretical Understanding
+
+### What is the Data Interaction Framework?
+
+The Data Interaction Framework supports the definition and handling of data used by Revenue Cloud runtime processes. It helps establish how relevant source information is structured, mapped, and made available for operations such as pricing and other business calculations.
+
+One important concept studied within this framework is the **Context Definition Layer**.
+
+## 4. Context Definition Layer
+
+### What is a Context Definition?
+
+A Context Definition establishes the structure of the data context used by a runtime process. It helps define the relevant data elements, their relationships, and the mappings required to make source information available for processing.
+
+In simple terms, it helps the runtime engine understand which data is available and how that data is organized for the required operation.
+
+### Key Responsibilities
+
+- **Data Structure:** Defines the structure of information required by a runtime process.
+- **Field Mapping:** Supports mapping relevant source data to the appropriate context fields.
+- **Data Relationships:** Represents relationships between relevant data elements.
+- **Runtime Processing:** Helps make the required data available to configured runtime operations.
+- **Reusable Configuration:** Supports structured data handling across applicable processes.
