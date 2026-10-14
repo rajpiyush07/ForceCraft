@@ -376,3 +376,119 @@ In simple terms, it helps the runtime engine understand which data is available 
 - **Data Relationships:** Represents relationships between relevant data elements.
 - **Runtime Processing:** Helps make the required data available to configured runtime operations.
 - **Reusable Configuration:** Supports structured data handling across applicable processes.
+
+
+
+
+==========================================================================================================================================================================================================================================================================================================================================
+
+
+
+
+                       14/10/2026
+
+
+
+# Salesforce Revenue Cloud: Context Definition, Pricing Procedure & Decision Tables
+
+## 1. Overview
+
+Salesforce Revenue Cloud uses Context Definitions, Pricing Procedures, and Decision Tables to support configurable, data-driven pricing calculations.
+
+These components work together to retrieve relevant business data, evaluate pricing conditions, calculate product prices, and return the results to the transaction context.
+
+This document explains the execution flow, Salesforce data mapping, pricing data synchronization, and the role of each component.
+
+## 2. Execution Flow
+
+The conceptual pricing flow is:
+
+**Salesforce Source Data → Context Definition → Pricing Procedure → Decision Table Lookup → Pricing Calculation → Context Update**
+
+> Note: A Pricing Procedure can invoke a Decision Table at a particular step. The Decision Table returns its result to the relevant pricing element, so this is not necessarily a strictly linear sequence in every implementation.
+
+### Step 1: Salesforce Source Data
+
+Salesforce stores the original business records and pricing information required for the transaction.
+
+Examples include:
+- Quote and Quote Line records
+- Product and Price Book Entry records
+- Customer and Account information
+- Quantity, currency, and other pricing inputs
+- Custom pricing configuration records
+
+These records provide the information required to calculate the appropriate price.
+
+### Step 2: Context Definition
+
+A Context Definition establishes the data structure required by the pricing process. It defines nodes, attributes, relationships, context tags, and mappings.
+
+Mapping connects the required context attributes to the appropriate Salesforce object fields.
+
+**Key responsibilities:**
+- Define the structure of pricing inputs.
+- Map Salesforce data into context attributes.
+- Organize related transaction and customer information.
+- Provide context tags that pricing elements can reference.
+- Receive pricing outputs through the associated context tags.
+
+Salesforce provides the `SalesTransactionContext` context definition for sales transactions involving objects such as Quotes, Assets, and Orders. Pricing implementations can extend the base context to accommodate additional requirements.
+
+### Step 3: Pricing Procedure
+
+A Pricing Procedure defines the sequence of pricing elements used to calculate a product's price.
+
+Each pricing element receives inputs, performs its configured operation, and produces outputs that can be used by subsequent elements.
+
+Depending on the pricing strategy, a procedure can include:
+- List Price calculation
+- Volume Discount calculation
+- Attribute-based pricing
+- Manual Discount
+- Additional price adjustments
+- Net Price and total price calculations
+
+**Example:**
+
+A product has a list price of ₹50,000. The Pricing Procedure determines the applicable pricing steps and invokes the relevant pricing logic to calculate the final amount.
+
+### Step 4: Decision Table
+
+Decision Tables store structured conditions and corresponding results. A Pricing Procedure can invoke a Decision Table to retrieve the appropriate pricing information or rule outcome.
+
+For example:
+
+| Customer Type | Quantity | Discount |
+|---|---:|---:|
+| Retail | 1–5 | 0% |
+| Enterprise | 1–5 | 10% |
+| Enterprise | 6–10 | 15% |
+
+If an Enterprise customer purchases 3 units, the applicable row returns a 10% discount.
+
+The pricing element then uses that output in the remaining calculation steps.
+
+**Benefits:**
+- Centralized pricing rules
+- Reduced need for hardcoded conditions
+- Easier maintenance of pricing policies
+- Better visibility into decision logic
+
+### Step 5: Pricing Result and Context Update
+
+After the pricing elements execute, the procedure returns its outputs through the relevant context tags.
+
+The resulting pricing information can then be used by the transaction process to update the applicable quote or quote line information.
+
+The exact fields updated depend on the pricing configuration and transaction flow.
+
+## 3. Real-Time Pricing Data Synchronization
+
+### What is Pricing Data Synchronization?
+
+Salesforce Pricing provides a synchronization operation that refreshes the pricing lookup data used by Decision Tables.
+
+For example, a company maintains product prices and discount information in Salesforce records. When the pricing administrator performs the configured **Sync Pricing Data** operation, the relevant pricing data is refreshed in the decision-table lookup layer.
+
+This helps pricing calculations use the appropriate synchronized pricing data.
