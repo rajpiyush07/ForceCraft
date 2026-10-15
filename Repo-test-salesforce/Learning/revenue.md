@@ -492,3 +492,132 @@ Salesforce Pricing provides a synchronization operation that refreshes the prici
 For example, a company maintains product prices and discount information in Salesforce records. When the pricing administrator performs the configured **Sync Pricing Data** operation, the relevant pricing data is refreshed in the decision-table lookup layer.
 
 This helps pricing calculations use the appropriate synchronized pricing data.
+
+
+
+==========================================================================================================================================================================================================================================================================================================================================
+
+
+                                       15/10/2026
+
+# Salesforce Revenue Cloud – Qualification Rules & Usage-Based Products
+
+## 1. Qualification Rules
+
+Qualification Rules in Salesforce Revenue Cloud help determine whether a product, offer, or option meets specific business eligibility criteria.
+
+### Key Learnings
+- Learned the purpose of Qualification Rules and their role in product qualification.
+- Practiced defining conditions to evaluate whether a product or option qualifies for a particular scenario.
+- Understood how qualification logic can use contextual data and decision outcomes to support business requirements.
+
+## 2. Context Definition
+
+A Context Definition specifies the data structure and context required to evaluate business rules.
+
+### Hands-on Practice
+- Created a Context Definition for the qualification process.
+- Identified the data inputs required for evaluating qualification conditions.
+- Explored how relevant Salesforce data can be made available to the rule evaluation process.
+- Understood the role of context in connecting input data with decision logic.
+
+## 3. Decision Table
+
+A Decision Table represents business logic through configurable conditions and corresponding outcomes.
+
+### Hands-on Practice
+- Created and configured a Decision Table.
+- Defined input conditions and expected output values.
+- Practiced organizing qualification logic into structured business rules.
+- Understood how decision tables make business logic easier to maintain and update.
+
+### Example
+A business can use a Decision Table to evaluate customer eligibility based on product type, usage level, or customer category.
+
+## 4. Qualification Table
+
+A Qualification Table is used in the qualification setup to represent and manage the criteria or outcomes required for product qualification.
+
+### Hands-on Practice
+- Created a Qualification Table as part of the qualification implementation.
+- Explored how qualification criteria are represented and evaluated.
+- Practiced working with the qualification configuration alongside Context Definitions and Decision Tables.
+
+## 5. Qualification Process – Conceptual Flow
+
+The following represents the general relationship between the components practiced:
+
+1. **Context Definition:** Defines the required input data and context.
+2. **Decision Table:** Evaluates configured conditions and produces decision outcomes.
+3. **Qualification Rule and Table:** Use the configured qualification logic to determine eligibility according to the implementation.
+4. **Qualification Outcome:** Determines whether the relevant product or option meets the configured business criteria.
+
+*Note: The exact execution sequence and relationship between these components depend on the Revenue Cloud configuration.*
+
+---
+
+## 6. Usage-Based Products
+
+Usage-Based Products are products or services whose charges depend on measured consumption, usage quantities, or commitment agreements.
+
+### Key Learnings
+- Learned the fundamentals of usage-based products in Salesforce Revenue Cloud.
+- Explored different usage models and their pricing concepts.
+- Understood how usage models support consumption-based monetization.
+- Studied how customer commitments can define included usage, quantities, or monetary limits.
+
+## 7. Types of Usage Models
+
+### 7.1 Anchor Model
+
+The Anchor model uses a defined reference point or anchor to associate usage with the relevant product or commercial arrangement.
+
+**Learning points:**
+- Studied the concept of an anchor in usage-based product modeling.
+- Explored how the anchor can help associate usage with the applicable product or agreement.
+- Learned its role in structuring usage-related configuration.
+
+### 7.2 Pack Model
+
+The Pack model organizes usage into predefined units or packs.
+
+**Example:** A customer purchases a pack of 1,000 API calls.
+
+**Learning points:**
+- Understood how usage can be organized into predefined packs.
+- Explored how pack sizes can represent a specific quantity of usage.
+- Learned how pack-based offerings can support predefined consumption options.
+
+### 7.3 Quantity Commitment Model
+
+The Quantity Commitment model defines a commitment to consume or purchase a specified quantity of usage.
+
+**Example:** A customer commits to consuming 10,000 API calls during a contract period.
+
+**Learning points:**
+- Studied quantity-based commitments.
+- Understood how a defined usage quantity can form part of a commercial agreement.
+- Explored the relationship between committed quantity and actual consumption.
+
+### 7.4 Token Commitment Model
+
+The Token Commitment model uses a defined token allocation or commitment for usage.
+
+**Example:** A customer receives a commitment of 50,000 tokens for an AI-powered service.
+
+**Learning points:**
+- Learned how tokens can represent units of consumption for a service.
+- Explored token-based usage commitments.
+- Understood the importance of tracking consumption against the allocated token commitment.
+
+### 7.5 Monetary Commitment Model
+
+The Monetary Commitment model defines a committed monetary amount for usage during a specified period.
+
+**Example:** A customer commits to spending ₹50,000 on a cloud service during a contract period.
+
+**Learning points:**
+- Studied monetary commitments for usage-based services.
+- Understood how a financial commitment can define the commercial arrangement.
+- Explored how usage charges may be tracked against the committed amount.
+
