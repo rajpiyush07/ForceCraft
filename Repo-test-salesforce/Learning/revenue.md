@@ -621,3 +621,72 @@ The Monetary Commitment model defines a committed monetary amount for usage duri
 - Understood how a financial commitment can define the commercial arrangement.
 - Explored how usage charges may be tracked against the committed amount.
 
+
+
+
+==========================================================================================================================================================================================================================================================================================================================================
+
+
+
+                                 19/10/2026
+
+
+
+# Salesforce Revenue Cloud – Rate Card & Price Management
+
+## 1. Rate Card: Base, Tiers, and Attributes
+
+- **Rate Card:** Defines the pricing structure for usage-based products or services.
+- **Base Rate:** The standard rate charged per unit of usage.
+- **Tier-Based Rate:** Pricing changes according to usage ranges or quantity slabs.
+- **Attribute-Based Rate:** Pricing varies based on attributes such as region, service type, or customer category.
+
+**Example:**
+A cloud service charges ₹10 per API call, but the rate changes based on monthly usage or the selected service tier.
+
+---
+
+## 2. Rate Card Management
+
+Rate Card Management helps maintain rates and determine how charges are calculated.
+
+- **Rate Card:** The main container that organizes pricing rates.
+- **Rate Card Entry:** An individual pricing entry defining a rate for a particular product, usage type, or condition.
+- **Rate Adjustment by Tiers:** Adjusts rates based on usage slabs.
+  - 1–100 calls: ₹10 per call
+  - 101–500 calls: ₹8 per call
+- **Rate Adjustment by Attributes:** Adjusts rates based on attributes such as region, service level, or customer category.
+
+---
+
+## 3. Price Management → Pricing Procedure
+
+**Price Management** manages how prices are determined and calculated in Salesforce Revenue Cloud.
+
+A **Pricing Procedure** defines the sequence of steps used to calculate the final price of a product or service.
+
+### Core Elements to Configure
+
+- **Pricing Procedure:** Defines the overall pricing calculation flow.
+- **Pricing Procedure Step:** Specifies an individual calculation step and its sequence.
+- **Pricing Element:** Represents a pricing component, such as a base price, discount, surcharge, or tax.
+- **Condition / Decision Logic:** Determines when a pricing rule or calculation applies.
+- **Formula / Calculation Logic:** Calculates the value for a pricing step when required.
+- **Input and Output Mapping:** Passes the required data into the pricing process and returns calculated results.
+
+### Example Pricing Flow
+
+| Pricing Component | Amount |
+|---|---:|
+| Base Rate | ₹1,000 |
+| Tier Adjustment | -₹100 |
+| Discount | -₹50 |
+| **Final Price** | **₹850** |
+
+> **Note:** This is an illustrative example. Actual calculation order and configuration depend on the pricing setup.
+
+## 4. Key Takeaway
+
+**Rate Card → Rate Card Entry → Tier / Attribute Adjustments → Pricing Procedure → Final Calculated Price**
+
+These concepts help manage usage-based pricing and configure pricing calculations in Salesforce Revenue Cloud.
