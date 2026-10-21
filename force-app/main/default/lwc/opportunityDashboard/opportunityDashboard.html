@@ -1,11 +1,10 @@
-
 <template>
     <lightning-card title="Opportunity Dashboard" icon-name="standard:opportunity">
         <div class="slds-p-horizontal_medium slds-p-bottom_medium dashboard-container">
 
             <!-- KPI CARDS -->
             <div class="slds-grid slds-wrap slds-gutters kpi-grid">
-                <!-- TOTAL OPPORTUNITIES -->
+
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_small">
                     <article class="kpi-card kpi-orange">
                         <div class="kpi-header">
@@ -35,7 +34,6 @@
                     </article>
                 </div>
 
-                <!-- PIPELINE AMOUNT -->
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_small">
                     <article class="kpi-card kpi-blue">
                         <div class="kpi-header">
@@ -65,7 +63,6 @@
                     </article>
                 </div>
 
-                <!-- CLOSED WON REVENUE -->
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_small">
                     <article class="kpi-card kpi-green">
                         <div class="kpi-header">
@@ -88,7 +85,6 @@
                     </article>
                 </div>
 
-                <!-- OPEN OPPORTUNITIES -->
                 <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_small">
                     <article class="kpi-card kpi-purple">
                         <div class="kpi-header">
@@ -119,18 +115,20 @@
                 </div>
             </div>
 
+           
             <!-- STAGE ANALYTICS -->
             <div class="slds-grid slds-wrap slds-gutters analytics-grid">
-                <!-- OPPORTUNITY COUNT BY STAGE -->
+
+                <!-- Opportunity Count Donut -->
                 <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-m-bottom_medium">
-                    <section class="analytics-card" aria-label="Opportunity count by stage">
+                    <section class="analytics-card donut-card" aria-label="Opportunity count by stage">
                         <div class="analytics-header">
                             <h2 class="analytics-title">Opportunity Count by Stage</h2>
-                            <p class="analytics-subtitle">Number of opportunities in each sales stage</p>
+                            <p class="analytics-subtitle">Distribution across sales stages</p>
                         </div>
 
                         <template if:true={isAnalyticsLoading}>
-                            <lightning-spinner alternative-text="Loading stage analytics" size="small"></lightning-spinner>
+                            <lightning-spinner alternative-text="Loading opportunity count" size="small"></lightning-spinner>
                         </template>
 
                         <template if:true={analyticsError}>
@@ -138,18 +136,24 @@
                         </template>
 
                         <template if:true={hasStageAnalytics}>
-                            <div class="analytics-chart">
-                                <template for:each={stageCountChart} for:item="item">
-                                    <div key={item.stageName} class="analytics-row">
-                                        <div class="analytics-row-header">
-                                            <span class="analytics-stage">{item.stageName}</span>
-                                            <span class="analytics-value">{item.countLabel}</span>
-                                        </div>
-                                        <div class="analytics-track" role="img" aria-label={item.stageName}>
-                                            <div class="analytics-bar" style={item.barStyle}></div>
-                                        </div>
+                            <div class="donut-layout">
+                                <div class="donut-chart" style={countDonutStyle}
+                                    role="img" aria-label={countDonutDescription}>
+                                    <div class="donut-center">
+                                        <span class="donut-total">{totalOpportunityCount}</span>
+                                        <span class="donut-center-label">Opportunities</span>
                                     </div>
-                                </template>
+                                </div>
+
+                                <div class="donut-legend">
+                                    <template for:each={stageCountChart} for:item="item">
+                                        <div key={item.stageName} class="donut-legend-row">
+                                            <span class="donut-legend-dot" style={item.legendStyle}></span>
+                                            <span class="donut-legend-name" title={item.stageName}>{item.stageName}</span>
+                                            <span class="donut-legend-value">{item.countLabel}</span>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
                         </template>
 
@@ -163,16 +167,16 @@
                     </section>
                 </div>
 
-                <!-- PIPELINE AMOUNT BY STAGE -->
+                <!-- Pipeline Amount Donut -->
                 <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-m-bottom_medium">
-                    <section class="analytics-card" aria-label="Pipeline amount by stage">
+                    <section class="analytics-card donut-card" aria-label="Pipeline amount by stage">
                         <div class="analytics-header">
                             <h2 class="analytics-title">Pipeline Amount by Stage</h2>
-                            <p class="analytics-subtitle">Total opportunity amount grouped by sales stage</p>
+                            <p class="analytics-subtitle">Value distribution across sales stages</p>
                         </div>
 
                         <template if:true={isAnalyticsLoading}>
-                            <lightning-spinner alternative-text="Loading pipeline amount analytics" size="small"></lightning-spinner>
+                            <lightning-spinner alternative-text="Loading pipeline amount" size="small"></lightning-spinner>
                         </template>
 
                         <template if:true={analyticsError}>
@@ -180,18 +184,24 @@
                         </template>
 
                         <template if:true={hasStageAnalytics}>
-                            <div class="analytics-chart">
-                                <template for:each={stageAmountChart} for:item="item">
-                                    <div key={item.stageName} class="analytics-row">
-                                        <div class="analytics-row-header">
-                                            <span class="analytics-stage">{item.stageName}</span>
-                                            <span class="analytics-value">{item.amountLabel}</span>
-                                        </div>
-                                        <div class="analytics-track" role="img" aria-label={item.stageName}>
-                                            <div class="analytics-bar analytics-bar-amount" style={item.barStyle}></div>
-                                        </div>
+                            <div class="donut-layout">
+                                <div class="donut-chart" style={amountDonutStyle}
+                                    role="img" aria-label={amountDonutDescription}>
+                                    <div class="donut-center">
+                                        <span class="donut-total donut-currency-total">{pipelineTotalLabel}</span>
+                                        <span class="donut-center-label">Pipeline</span>
                                     </div>
-                                </template>
+                                </div>
+
+                                <div class="donut-legend">
+                                    <template for:each={stageAmountChart} for:item="item">
+                                        <div key={item.stageName} class="donut-legend-row">
+                                            <span class="donut-legend-dot" style={item.legendStyle}></span>
+                                            <span class="donut-legend-name" title={item.stageName}>{item.stageName}</span>
+                                            <span class="donut-legend-value">{item.amountLabel}</span>
+                                        </div>
+                                    </template>
+                                </div>
                             </div>
                         </template>
 
@@ -204,7 +214,9 @@
                         </template>
                     </section>
                 </div>
+
             </div>
+
 
             <!-- SEARCH, FILTER, AND SORT -->
             <div class="slds-grid slds-wrap slds-gutters slds-m-top_medium slds-m-bottom_medium">
@@ -255,7 +267,81 @@
                     variant="brand"
                     onclick={handleOpenCreateForm}>
                 </lightning-button>
+                <lightning-button
+                    label="Refresh"
+                    icon-name="utility:refresh"
+                    onclick={handleRefresh}
+                    class="slds-m-right_small">
+                </lightning-button>
             </div>
+
+            
+            <!-- PHASE 2.3: ADVANCED FILTERS -->
+            <div class="slds-box slds-theme_default slds-m-bottom_medium">
+                <h2 class="slds-text-heading_small slds-m-bottom_medium">
+                    Advanced Filters
+                </h2>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <lightning-input
+                            type="number"
+                            label="Minimum Amount"
+                            value={minAmount}
+                            min="0"
+                            step="0.01"
+                            onchange={handleMinAmountChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <lightning-input
+                            type="number"
+                            label="Maximum Amount"
+                            value={maxAmount}
+                            min="0"
+                            step="0.01"
+                            onchange={handleMaxAmountChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <lightning-input
+                            type="date"
+                            label="Close Date From"
+                            value={closeDateFrom}
+                            onchange={handleCloseDateFromChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                        <lightning-input
+                            type="date"
+                            label="Close Date To"
+                            value={closeDateTo}
+                            onchange={handleCloseDateToChange}>
+                        </lightning-input>
+                    </div>
+                </div>
+
+                <div class="slds-m-top_medium">
+                    <lightning-button
+                        label="Apply Filters"
+                        variant="brand"
+                        icon-name="utility:filter"
+                        onclick={handleApplyFilters}>
+                    </lightning-button>
+
+                    <lightning-button
+                        label="Clear Filters"
+                        variant="neutral"
+                        class="slds-m-left_small"
+                        onclick={handleClearFilters}>
+                    </lightning-button>
+                </div>
+            </div>
+            <!-- END PHASE 2.3: ADVANCED FILTERS -->
+
 
             <!-- CREATE OPPORTUNITY MODAL -->
             <template if:true={isCreateFormOpen}>
@@ -353,10 +439,19 @@
                         </footer>
                     </div>
                 </section>
+
                 <div class="slds-backdrop slds-backdrop_open"></div>
             </template>
-
-            <!-- OPPORTUNITY LIST HEADER -->
+            <template if:true={isLoading}>
+                <div class="slds-is-relative slds-p-around_large">
+                    <lightning-spinner
+                        alternative-text="Loading opportunities"
+                        size="medium"
+                        variant="brand">
+                    </lightning-spinner>
+                </div>
+            </template>
+                        <!-- OPPORTUNITY LIST HEADER -->
             <div class="slds-grid slds-wrap slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_medium">
                 <div>
                     <h2 class="slds-text-heading_medium">Opportunities</h2>
@@ -364,21 +459,33 @@
                         {recordCountLabel}
                     </p>
                 </div>
-
-
             </div>
 
             <!-- PAGINATION CONTROLS -->
             <div class="slds-grid slds-wrap slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_medium">
                 <p class="slds-text-body_small slds-text-color_weak">{paginationLabel}</p>
+
                 <div class="slds-grid slds-grid_vertical-align-center">
+                    <lightning-combobox
+                        label="Records per page"
+                        value={pageSizeValue}
+                        options={pageSizeOptions}
+                        onchange={handlePageSizeChange}
+                        variant="label-hidden"
+                        class="page-size-selector">
+                    </lightning-combobox>
+                    
                     <lightning-button
                         label="Previous"
                         icon-name="utility:chevronleft"
                         onclick={handlePreviousPage}
                         disabled={isFirstPage}>
                     </lightning-button>
-                    <span class="slds-m-horizontal_small">Page {currentPage} of {totalPages}</span>
+
+                    <span class="slds-m-horizontal_small">
+                        Page {currentPage} of {totalPages}
+                    </span>
+
                     <lightning-button
                         label="Next"
                         icon-name="utility:chevronright"
@@ -426,21 +533,36 @@
                                         <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
                                             <p class="slds-text-color_weak slds-text-body_small">Amount</p>
                                             <p class="slds-text-heading_medium">
-                                                <lightning-formatted-number value={opp.Amount} format-style="currency" currency-code="INR" maximum-fraction-digits="2"></lightning-formatted-number>
+                                                <lightning-formatted-number
+                                                    value={opp.Amount}
+                                                    format-style="currency"
+                                                    currency-code="INR"
+                                                    maximum-fraction-digits="2">
+                                                </lightning-formatted-number>
                                             </p>
                                         </div>
 
                                         <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
                                             <p class="slds-text-color_weak slds-text-body_small">Close Date</p>
                                             <p>
-                                                <lightning-formatted-date-time value={opp.CloseDate} year="numeric" month="short" day="2-digit" time-zone="UTC"></lightning-formatted-date-time>
+                                                <lightning-formatted-date-time
+                                                    value={opp.CloseDate}
+                                                    year="numeric"
+                                                    month="short"
+                                                    day="2-digit"
+                                                    time-zone="UTC">
+                                                </lightning-formatted-date-time>
                                             </p>
                                         </div>
 
                                         <div class="slds-col slds-size_1-of-2">
                                             <p class="slds-text-color_weak slds-text-body_small">Probability</p>
                                             <p>
-                                                <lightning-formatted-number value={opp.Probability} format-style="percent" maximum-fraction-digits="0"></lightning-formatted-number>
+                                                <lightning-formatted-number
+                                                    value={opp.Probability}
+                                                    format-style="percent"
+                                                    maximum-fraction-digits="0">
+                                                </lightning-formatted-number>
                                             </p>
                                         </div>
 
@@ -453,7 +575,10 @@
                                     <!-- EXPANDED DETAILS -->
                                     <template if:true={opp.isExpanded}>
                                         <div class="slds-border_top slds-m-top_medium slds-p-top_medium">
-                                            <h3 class="slds-text-heading_small slds-m-bottom_small">Opportunity Details</h3>
+                                            <h3 class="slds-text-heading_small slds-m-bottom_small">
+                                                Opportunity Details
+                                            </h3>
+
                                             <dl class="slds-list_horizontal slds-wrap">
                                                 <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Name</dt>
                                                 <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">{opp.Name}</dd>
@@ -466,7 +591,11 @@
 
                                                 <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Amount</dt>
                                                 <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">
-                                                    <lightning-formatted-number value={opp.Amount} format-style="currency" currency-code="INR"></lightning-formatted-number>
+                                                    <lightning-formatted-number
+                                                        value={opp.Amount}
+                                                        format-style="currency"
+                                                        currency-code="INR">
+                                                    </lightning-formatted-number>
                                                 </dd>
 
                                                 <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Close Date</dt>
@@ -474,7 +603,11 @@
 
                                                 <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Probability</dt>
                                                 <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">
-                                                    <lightning-formatted-number value={opp.Probability} format-style="percent" maximum-fraction-digits="0"></lightning-formatted-number>
+                                                    <lightning-formatted-number
+                                                        value={opp.Probability}
+                                                        format-style="percent"
+                                                        maximum-fraction-digits="0">
+                                                    </lightning-formatted-number>
                                                 </dd>
 
                                                 <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Record ID</dt>
@@ -485,8 +618,20 @@
                                 </div>
 
                                 <footer class="slds-card__footer slds-text-align_right">
-                                    <lightning-button label={opp.detailsButtonLabel} variant="base" data-id={opp.Id} onclick={handleToggleDetails}></lightning-button>
-                                    <lightning-button class="slds-m-left_small" label="Open Record" variant="brand-outline" data-id={opp.Id} onclick={handleOpenRecord}></lightning-button>
+                                    <lightning-button
+                                        label={opp.detailsButtonLabel}
+                                        variant="base"
+                                        data-id={opp.Id}
+                                        onclick={handleToggleDetails}>
+                                    </lightning-button>
+
+                                    <lightning-button
+                                        class="slds-m-left_small"
+                                        label="Open Record"
+                                        variant="brand-outline"
+                                        data-id={opp.Id}
+                                        onclick={handleOpenRecord}>
+                                    </lightning-button>
                                 </footer>
                             </article>
                         </div>
@@ -501,10 +646,16 @@
                         <lightning-icon icon-name="utility:search" size="medium" alternative-text="No results"></lightning-icon>
                         <p class="slds-text-heading_small slds-m-top_small">No opportunities found</p>
                         <p class="slds-text-color_weak">Try changing your search term or stage filter.</p>
+                        <lightning-button
+                            label="Clear Filters"
+                            variant="brand-outline"
+                            class="slds-m-top_medium"
+                            onclick={handleClearFilters}>
+                        </lightning-button>
                     </div>
                 </template>
             </template>
-
+            
         </div>
     </lightning-card>
 </template>

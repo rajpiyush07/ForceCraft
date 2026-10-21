@@ -214,7 +214,7 @@ private class OpportunityDashboardControllerTest {
             stageResults[0].StageName
         );
     }
-
+    
     // --------------------------------------------------
     // TEST DASHBOARD METRICS
     // --------------------------------------------------

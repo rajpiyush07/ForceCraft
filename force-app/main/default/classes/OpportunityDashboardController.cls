@@ -133,6 +133,234 @@ public with sharing class OpportunityDashboardController {
             LIMIT 100
         ];
     }
+    
+    // --------------------------------------------------
+    // SERVER-SIDE PAGINATION, FILTERING AND SORTING
+    // --------------------------------------------------
+
+    public class OpportunityPage {
+        @AuraEnabled public List<Opportunity> records { get; set; }
+        @AuraEnabled public Integer totalRecords { get; set; }
+        @AuraEnabled public Integer currentPage { get; set; }
+        @AuraEnabled public Integer pageSize { get; set; }
+        @AuraEnabled public Integer totalPages { get; set; }
+    }
+
+    @AuraEnabled(cacheable=true)
+        public static OpportunityPage getOpportunitiesPage(
+            String searchKey,
+            String stageName,
+            String sortBy,
+            String sortDirection,
+            Integer pageNumber,
+            Integer pageSize,
+            Decimal minAmount,
+            Decimal maxAmount,
+            Date closeDateFrom,
+            Date closeDateTo
+        ) {
+        requireReadableFields();
+
+        // Validate pagination parameters.
+        Integer safePage = pageNumber == null ? 1 : pageNumber;
+        Integer safePageSize = pageSize == null ? 10 : pageSize;
+
+        if (safePage < 1) {
+            throw new AuraHandledException(
+                'Page number must be greater than zero.'
+            );
+        }
+
+        if (safePageSize < 1 || safePageSize > 100) {
+            throw new AuraHandledException(
+                'Page size must be between 1 and 100.'
+            );
+        }
+
+                // Validate amount filters.
+        if (minAmount != null && minAmount < 0) {
+            throw new AuraHandledException(
+                'Minimum amount cannot be negative.'
+            );
+        }
+
+        if (maxAmount != null && maxAmount < 0) {
+            throw new AuraHandledException(
+                'Maximum amount cannot be negative.'
+            );
+        }
+
+        if (
+            minAmount != null &&
+            maxAmount != null &&
+            minAmount > maxAmount
+        ) {
+            throw new AuraHandledException(
+                'Minimum amount cannot exceed maximum amount.'
+            );
+        }
+
+        // Validate close date filters.
+        if (
+            closeDateFrom != null &&
+            closeDateTo != null &&
+            closeDateFrom > closeDateTo
+        ) {
+            throw new AuraHandledException(
+                'Start close date cannot be after end close date.'
+            );
+        }
+
+        Integer rowOffset = (safePage - 1) * safePageSize;
+
+        // SOQL OFFSET supports a maximum of 2,000 skipped rows.
+        if (rowOffset > 2000) {
+            throw new AuraHandledException(
+                'This page is beyond the supported pagination range. ' +
+                'Use a smaller page number or page size.'
+            );
+        }
+
+        String selectedStage = String.isBlank(stageName)
+            ? 'All'
+            : stageName.trim();
+
+        if (
+            selectedStage != 'All' &&
+            !isValidActiveStage(selectedStage)
+        ) {
+            throw new AuraHandledException(
+                'The selected opportunity stage is invalid.'
+            );
+        }
+
+        // Only allow known fields in ORDER BY.
+        Map<String, String> sortableFields = new Map<String, String>{
+            'Name' => 'Name',
+            'Amount' => 'Amount',
+            'CloseDate' => 'CloseDate',
+            'StageName' => 'StageName',
+            'LastModifiedDate' => 'LastModifiedDate'
+        };
+
+        String requestedSort = String.isBlank(sortBy)
+            ? 'LastModifiedDate'
+            : sortBy.trim();
+
+        if (!sortableFields.containsKey(requestedSort)) {
+            throw new AuraHandledException(
+                'The selected sort field is not supported.'
+            );
+        }
+
+        String direction = String.isBlank(sortDirection)
+            ? 'DESC'
+            : sortDirection.trim().toUpperCase();
+
+        if (direction != 'ASC' && direction != 'DESC') {
+            throw new AuraHandledException(
+                'Sort direction must be ASC or DESC.'
+            );
+        }
+
+        String trimmedSearch = String.isBlank(searchKey)
+            ? ''
+            : searchKey.trim();
+
+        Map<String, Object> binds = new Map<String, Object>();
+        List<String> conditions = new List<String>();
+
+        if (!String.isBlank(trimmedSearch)) {
+            conditions.add('Name LIKE :searchPattern');
+            binds.put('searchPattern', '%' + trimmedSearch + '%');
+        }
+
+        if (selectedStage != 'All') {
+            conditions.add('StageName = :selectedStage');
+            binds.put('selectedStage', selectedStage);
+        }
+
+                // Minimum opportunity amount.
+        if (minAmount != null) {
+            conditions.add('Amount >= :minAmount');
+            binds.put('minAmount', minAmount);
+        }
+
+        // Maximum opportunity amount.
+        if (maxAmount != null) {
+            conditions.add('Amount <= :maxAmount');
+            binds.put('maxAmount', maxAmount);
+        }
+
+        // Close date start.
+        if (closeDateFrom != null) {
+            conditions.add('CloseDate >= :closeDateFrom');
+            binds.put('closeDateFrom', closeDateFrom);
+        }
+
+        // Close date end.
+        if (closeDateTo != null) {
+            conditions.add('CloseDate <= :closeDateTo');
+            binds.put('closeDateTo', closeDateTo);
+        }
+
+        String whereClause = conditions.isEmpty()
+            ? ''
+            : ' WHERE ' + String.join(conditions, ' AND ');
+
+        // Count only records matching the current filters.
+        String countQuery =
+            'SELECT COUNT() FROM Opportunity' + whereClause;
+
+        Integer matchingRecords = (Integer) Database.countQueryWithBinds(
+            countQuery,
+            binds,
+            AccessLevel.USER_MODE
+        );
+
+        Integer calculatedPages = matchingRecords == 0
+        ? 0
+        : (matchingRecords + safePageSize - 1) / safePageSize;
+
+        // If filters change and the requested page no longer exists,
+        // return the last available page (or page 1 when no rows match).
+        if (calculatedPages == 0) {
+            safePage = 1;
+            rowOffset = 0;
+        } else if (safePage > calculatedPages) {
+            safePage = calculatedPages;
+            rowOffset = (safePage - 1) * safePageSize;
+        }
+
+        String sortField = sortableFields.get(requestedSort);
+
+        String recordsQuery =
+        'SELECT Id, Name, Account.Name, Amount, StageName, ' +
+        'CloseDate, Probability, LastModifiedDate ' +
+        'FROM Opportunity' +
+        whereClause +
+        ' ORDER BY ' + sortField + ' ' + direction + ', Id ASC' +
+        ' LIMIT :limitSize OFFSET :rowOffset';
+
+        binds.put('limitSize', safePageSize);
+        binds.put('rowOffset', rowOffset);
+
+        List<Opportunity> pageRecords = (List<Opportunity>)
+            Database.queryWithBinds(
+                recordsQuery,
+                binds,
+                AccessLevel.USER_MODE
+            );
+
+        OpportunityPage response = new OpportunityPage();
+        response.records = pageRecords;
+        response.totalRecords = matchingRecords;
+        response.currentPage = safePage;
+        response.pageSize = safePageSize;
+        response.totalPages = calculatedPages;
+
+        return response;
+    }
 
     // --------------------------------------------------
     // CREATE OPPORTUNITY

@@ -3,7 +3,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
 import { NavigationMixin } from 'lightning/navigation';
 
-import getOpportunities from '@salesforce/apex/OpportunityDashboardController.getOpportunities';
+import getOpportunitiesPage from '@salesforce/apex/OpportunityDashboardController.getOpportunitiesPage';
 import createOpportunity from '@salesforce/apex/OpportunityDashboardController.createOpportunity';
 import getOpportunityMetrics from '@salesforce/apex/OpportunityDashboardController.getOpportunityMetrics';
 import getOpportunityStageAnalytics from '@salesforce/apex/OpportunityDashboardController.getOpportunityStageAnalytics';
@@ -21,12 +21,37 @@ const STAGES = [
     { label: 'Closed Lost', value: 'Closed Lost' }
 ];
 
+    const DONUT_COLORS = [
+            '#2563eb',
+            '#7c3aed',
+            '#0d9488',
+            '#ea580c',
+            '#db2777',
+            '#0891b2',
+            '#65a30d',
+            '#9333ea',
+            '#ca8a04',
+            '#64748b'
+        ];
+    
+
 export default class OpportunityDashboard extends NavigationMixin(LightningElement) {
     searchKey = '';
     stageName = 'All';
     opportunities = [];
 
-    wiredOpportunitiesResult;
+    // Phase 2.3: Advanced filter values
+    minAmount = '';
+    maxAmount = '';
+    closeDateFrom = '';
+    closeDateTo = '';
+
+    // Applied filters, kept separate until Apply Filters is clicked
+    appliedMinAmount = null;
+    appliedMaxAmount = null;
+    appliedCloseDateFrom = null;
+    appliedCloseDateTo = null;
+
     _wiredMetricsResult;
     _wiredStageAnalyticsResult;
 
@@ -35,11 +60,27 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
     isCreateFormOpen = false;
     isAnalyticsLoading = true;
 
-    // Client-side sorting and pagination of the records returned by Apex.
     sortBy = 'LastModifiedDate';
     sortDirection = 'desc';
     pageSize = 10;
     currentPage = 1;
+    
+
+    totalRecords = 0;
+    serverTotalPages = 0;
+    requestSequence = 0;
+
+
+    get pageSizeValue() {
+        return String(this.pageSize);
+    }
+
+    pageSizeOptions = [
+        { label: '10', value: '10' },
+        { label: '25', value: '25' },
+        { label: '50', value: '50' },
+        { label: '100', value: '100' }
+    ];
 
     metrics = {
         totalOpportunities: 0,
@@ -59,15 +100,17 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
 
     getTodayDate() {
         const now = new Date();
+
         return new Date(now.getTime() - now.getTimezoneOffset() * 60000)
             .toISOString()
             .slice(0, 10);
     }
 
-    // KPI METRICS
+    // Load KPI metrics.
     @wire(getOpportunityMetrics)
     wiredMetrics(result) {
         this._wiredMetricsResult = result;
+
         const { data, error } = result;
 
         if (data) {
@@ -75,14 +118,19 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
             this.metricsError = undefined;
         } else if (error) {
             this.metricsError = error;
-            this.showToast('Error loading metrics', this.getErrorMessage(error), 'error');
+            this.showToast(
+                'Error loading metrics',
+                this.getErrorMessage(error),
+                'error'
+            );
         }
     }
 
-    // OPPORTUNITY STAGE ANALYTICS
+    // Load opportunity stage analytics.
     @wire(getOpportunityStageAnalytics)
     wiredStageAnalytics(result) {
         this._wiredStageAnalyticsResult = result;
+
         const { data, error } = result;
 
         if (data) {
@@ -93,38 +141,81 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
             this.stageAnalytics = [];
             this.analyticsError = error;
             this.isAnalyticsLoading = false;
-            this.showToast('Error loading analytics', this.getErrorMessage(error), 'error');
+
+            this.showToast(
+                'Error loading analytics',
+                this.getErrorMessage(error),
+                'error'
+            );
         }
     }
 
-    // OPPORTUNITY RECORDS
-    @wire(getOpportunities, {
-        searchKey: '$searchKey',
-        stageName: '$stageName'
-    })
-    wiredOpportunities(result) {
-        this.wiredOpportunitiesResult = result;
+    // Load a page of opportunities from Salesforce.
+    connectedCallback() {
+        this.loadOpportunities();
+    }
 
-        if (result.data) {
-            this.opportunities = result.data.map((opp) => ({
+    async loadOpportunities() {
+        const requestId = ++this.requestSequence;
+        this.isLoading = true;
+
+        try {
+            const result = await getOpportunitiesPage({
+                searchKey: this.searchKey,
+                stageName: this.stageName,
+                sortBy: this.sortBy,
+                sortDirection: this.sortDirection,
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize,
+                minAmount: this.appliedMinAmount,
+                maxAmount: this.appliedMaxAmount,
+                closeDateFrom: this.appliedCloseDateFrom,
+                closeDateTo: this.appliedCloseDateTo
+            });
+
+            // Ignore stale responses from earlier requests.
+            if (requestId !== this.requestSequence) {
+                return;
+            }
+
+            this.opportunities = (result.records || []).map((opp) => ({
                 ...opp,
                 accountName: opp.Account ? opp.Account.Name : 'No Account',
                 isExpanded: false,
                 detailsButtonLabel: 'More Details'
             }));
-            this.currentPage = 1;
-            this.isLoading = false;
-        } else if (result.error) {
+
+            this.totalRecords = result.totalRecords || 0;
+            this.currentPage = result.currentPage || 1;
+            this.serverTotalPages = result.totalPages || 0;
+        } catch (error) {
+            if (requestId !== this.requestSequence) {
+                return;
+            }
+
             this.opportunities = [];
+            this.totalRecords = 0;
+            this.serverTotalPages = 0;
             this.currentPage = 1;
-            this.isLoading = false;
-            this.showToast('Error loading opportunities', this.getErrorMessage(result.error), 'error');
+
+            this.showToast(
+                'Error loading opportunities',
+                this.getErrorMessage(error),
+                'error'
+            );
+        } finally {
+            if (requestId === this.requestSequence) {
+                this.isLoading = false;
+            }
         }
     }
 
-    // FILTER AND SORT OPTIONS
+    // Filter and sort options.
     get stageOptions() {
-        return [{ label: 'All Stages', value: 'All' }, ...STAGES];
+        return [
+            { label: 'All Stages', value: 'All' },
+            ...STAGES
+        ];
     }
 
     get createStageOptions() {
@@ -145,48 +236,17 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
         return this.sortDirection === 'asc' ? 'Ascending' : 'Descending';
     }
 
-    // OPPORTUNITY LIST GETTERS
+    // Opportunity list getters.
     get hasRecords() {
         return this.opportunities.length > 0;
     }
 
-    get sortedOpportunities() {
-        const records = [...this.opportunities];
-        const direction = this.sortDirection === 'asc' ? 1 : -1;
-
-        records.sort((a, b) => {
-            let first = a[this.sortBy];
-            let second = b[this.sortBy];
-
-            if (first === null || first === undefined) first = '';
-            if (second === null || second === undefined) second = '';
-
-            let comparison;
-            if (typeof first === 'number' && typeof second === 'number') {
-                comparison = first - second;
-            } else {
-                comparison = String(first).localeCompare(String(second), undefined, {
-                    numeric: true,
-                    sensitivity: 'base'
-                });
-            }
-            return comparison * direction;
-        });
-
-        return records;
+    get displayedOpportunities() {
+        return this.opportunities;
     }
 
     get totalPages() {
-        return Math.max(1, Math.ceil(this.sortedOpportunities.length / this.pageSize));
-    }
-
-    get paginatedOpportunities() {
-        const start = (this.currentPage - 1) * this.pageSize;
-        return this.sortedOpportunities.slice(start, start + this.pageSize);
-    }
-
-    get displayedOpportunities() {
-        return this.paginatedOpportunities;
+        return Math.max(1, this.serverTotalPages);
     }
 
     get isFirstPage() {
@@ -194,95 +254,217 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
     }
 
     get isLastPage() {
-        return this.currentPage >= this.totalPages;
+        return (
+            this.serverTotalPages === 0 ||
+            this.currentPage >= this.serverTotalPages
+        );
     }
 
     get recordCountLabel() {
-        return `${this.opportunities.length} loaded opportunities`;
+        return `${this.totalRecords} matching opportunities`;
     }
 
     get paginationLabel() {
-        const total = this.sortedOpportunities.length;
-        if (total === 0) return 'No opportunities';
+        if (this.totalRecords === 0) {
+            return 'No opportunities';
+        }
 
         const start = (this.currentPage - 1) * this.pageSize + 1;
-        const end = Math.min(start + this.pageSize - 1, total);
-        return `Showing ${start}-${end} of ${total} loaded opportunities`;
+        const end = Math.min(
+            start + this.opportunities.length - 1,
+            this.totalRecords
+        );
+
+        return `Showing ${start}-${end} of ${this.totalRecords} opportunities`;
     }
 
-    // STAGE ANALYTICS GETTERS
+    // Stage analytics getters.
     get hasStageAnalytics() {
         return this.stageAnalytics.length > 0;
     }
 
-    get stageCountChart() {
-        const maxCount = Math.max(
-            1,
-            ...this.stageAnalytics.map((item) => item.opportunityCount || 0)
-        );
+    
 
-        return this.stageAnalytics.map((item) => ({
-            ...item,
-            barStyle: `width: ${((item.opportunityCount || 0) / maxCount) * 100}%`,
-            countLabel: String(item.opportunityCount || 0)
-        }));
-    }
+        get totalOpportunityCount() {
+            return this.stageAnalytics.reduce(
+                (total, item) => total + (Number(item.opportunityCount) || 0),
+                0
+            );
+        }
 
-    get stageAmountChart() {
-        const maxAmount = Math.max(
-            0,
-            ...this.stageAnalytics.map((item) => item.totalAmount || 0)
-        );
+        get pipelineTotal() {
+            return this.stageAnalytics.reduce(
+                (total, item) => total + (Number(item.totalAmount) || 0),
+                0
+            );
+        }
 
-        return this.stageAnalytics.map((item) => ({
-            ...item,
-            barStyle: `width: ${maxAmount > 0 ? ((item.totalAmount || 0) / maxAmount) * 100 : 0}%`,
-            amountLabel: new Intl.NumberFormat('en-IN', {
+        get pipelineTotalLabel() {
+            return new Intl.NumberFormat('en-IN', {
                 style: 'currency',
                 currency: 'INR',
-                maximumFractionDigits: 0
-            }).format(item.totalAmount || 0)
-        }));
-    }
+                notation: 'compact',
+                maximumFractionDigits: 1
+            }).format(this.pipelineTotal);
+        }
 
-    // SORTING AND PAGINATION HANDLERS
+        get countDonutDescription() {
+            return `Opportunity count distribution across ${this.stageAnalytics.length} stages`;
+        }
+
+        get amountDonutDescription() {
+            return `Pipeline amount distribution across ${this.stageAnalytics.length} stages`;
+        }
+
+        get countDonutStyle() {
+            const total = this.totalOpportunityCount;
+
+            if (total <= 0) {
+                return 'background: conic-gradient(#e5e7eb 0deg 360deg);';
+            }
+
+            let currentAngle = 0;
+            const segments = this.stageAnalytics.map((item, index) => {
+                const value = Math.max(0, Number(item.opportunityCount) || 0);
+                const start = currentAngle;
+                currentAngle += (value / total) * 360;
+
+                return `${DONUT_COLORS[index % DONUT_COLORS.length]} ${start}deg ${currentAngle}deg`;
+            });
+
+            return `background: conic-gradient(${segments.join(', ')});`;
+        }
+
+        get amountDonutStyle() {
+            const total = this.pipelineTotal;
+
+            if (total <= 0) {
+                return 'background: conic-gradient(#e5e7eb 0deg 360deg);';
+            }
+
+            let currentAngle = 0;
+            const segments = this.stageAnalytics.map((item, index) => {
+                const value = Math.max(0, Number(item.totalAmount) || 0);
+                const start = currentAngle;
+                currentAngle += (value / total) * 360;
+
+                return `${DONUT_COLORS[index % DONUT_COLORS.length]} ${start}deg ${currentAngle}deg`;
+            });
+
+            return `background: conic-gradient(${segments.join(', ')});`;
+        }
+
+        get stageCountChart() {
+            return this.stageAnalytics.map((item, index) => ({
+                ...item,
+                countLabel: String(Number(item.opportunityCount) || 0),
+                legendStyle: `background-color: ${DONUT_COLORS[index % DONUT_COLORS.length]};`
+            }));
+        }
+
+        get stageAmountChart() {
+            return this.stageAnalytics.map((item, index) => ({
+                ...item,
+                amountLabel: new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    maximumFractionDigits: 0
+                }).format(Number(item.totalAmount) || 0),
+                legendStyle: `background-color: ${DONUT_COLORS[index % DONUT_COLORS.length]};`
+            }));
+        }
+
+
+    // Sorting and pagination handlers.
     handleSortChange(event) {
         this.sortBy = event.detail.value;
         this.currentPage = 1;
+        this.loadOpportunities();
     }
 
     handleSortDirectionChange() {
-        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        this.sortDirection =
+            this.sortDirection === 'asc' ? 'desc' : 'asc';
+
         this.currentPage = 1;
+        this.loadOpportunities();
+    }
+
+    // Phase 2.4: Change records per page
+    handlePageSizeChange(event) {
+        this.pageSize = Number(event.detail.value);
+        this.currentPage = 1;
+        this.loadOpportunities();
     }
 
     handlePreviousPage() {
-        if (!this.isFirstPage) this.currentPage -= 1;
+        if (!this.isFirstPage) {
+            this.currentPage -= 1;
+            this.loadOpportunities();
+        }
     }
+
+    // Refresh dashboard opportunities
+    
+    async handleRefresh() {
+        try {
+            await Promise.all([
+                this.loadOpportunities(),
+                refreshApex(this._wiredMetricsResult),
+                refreshApex(this._wiredStageAnalyticsResult)
+            ]);
+
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: 'Dashboard refreshed successfully.',
+                    variant: 'success'
+                })
+            );
+        } catch (error) {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Refresh Failed',
+                    message: this.getErrorMessage(error),
+                    variant: 'error'
+                })
+            );
+        }
+    }
+
 
     handleNextPage() {
-        if (!this.isLastPage) this.currentPage += 1;
+        if (!this.isLastPage) {
+            this.currentPage += 1;
+            this.loadOpportunities();
+        }
     }
 
-    // EXPAND / COLLAPSE OPPORTUNITY DETAILS
+    // Expand or collapse opportunity details.
     handleToggleDetails(event) {
         const recordId = event.currentTarget.dataset.id;
+
         this.opportunities = this.opportunities.map((opp) => {
             if (opp.Id === recordId) {
                 const isExpanded = !opp.isExpanded;
+
                 return {
                     ...opp,
                     isExpanded,
-                    detailsButtonLabel: isExpanded ? 'Hide Details' : 'More Details'
+                    detailsButtonLabel: isExpanded
+                        ? 'Hide Details'
+                        : 'More Details'
                 };
             }
+
             return opp;
         });
     }
 
-    // NAVIGATE TO OPPORTUNITY RECORD
+    // Navigate to the opportunity record.
     handleOpenRecord(event) {
         const recordId = event.currentTarget.dataset.id;
+
         this[NavigationMixin.Navigate]({
             type: 'standard__recordPage',
             attributes: {
@@ -293,7 +475,7 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
         });
     }
 
-    // CREATE OPPORTUNITY MODAL
+    // Create opportunity modal.
     handleOpenCreateForm() {
         this.isCreateFormOpen = true;
     }
@@ -306,26 +488,111 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
         this.newCloseDate = this.getTodayDate();
     }
 
-    // SEARCH AND FILTER
+    // Search and stage filter.
     handleSearch(event) {
         this.searchKey = event.target.value;
         this.currentPage = 1;
-        this.isLoading = true;
+        this.loadOpportunities();
     }
 
     handleStageChange(event) {
         this.stageName = event.detail.value;
         this.currentPage = 1;
-        this.isLoading = true;
+        this.loadOpportunities();
     }
 
-    // CREATE FORM INPUT HANDLERS
+    // Create form input handlers.
+
+    
+    // Phase 2.3: Advanced filter input handlers
+    handleMinAmountChange(event) {
+        this.minAmount = event.target.value;
+    }
+
+    handleMaxAmountChange(event) {
+        this.maxAmount = event.target.value;
+    }
+
+    handleCloseDateFromChange(event) {
+        this.closeDateFrom = event.target.value;
+    }
+
+    handleCloseDateToChange(event) {
+        this.closeDateTo = event.target.value;
+    }
+
+    // Apply advanced filters
+    handleApplyFilters() {
+        const min = this.minAmount === '' ? null : Number(this.minAmount);
+        const max = this.maxAmount === '' ? null : Number(this.maxAmount);
+
+        if (
+            (min !== null && (!Number.isFinite(min) || min < 0)) ||
+            (max !== null && (!Number.isFinite(max) || max < 0))
+        ) {
+            this.showToast(
+                'Invalid amount',
+                'Amounts must be valid non-negative numbers.',
+                'warning'
+            );
+            return;
+        }
+
+        if (min !== null && max !== null && min > max) {
+            this.showToast(
+                'Invalid amount range',
+                'Minimum Amount cannot exceed Maximum Amount.',
+                'warning'
+            );
+            return;
+        }
+
+        if (
+            this.closeDateFrom &&
+            this.closeDateTo &&
+            this.closeDateFrom > this.closeDateTo
+        ) {
+            this.showToast(
+                'Invalid date range',
+                'Close Date From cannot be after Close Date To.',
+                'warning'
+            );
+            return;
+        }
+
+        this.appliedMinAmount = min;
+        this.appliedMaxAmount = max;
+        this.appliedCloseDateFrom = this.closeDateFrom || null;
+        this.appliedCloseDateTo = this.closeDateTo || null;
+
+        this.currentPage = 1;
+        this.loadOpportunities();
+    }
+
+    // Clear advanced filters
+    handleClearFilters() {
+        this.minAmount = '';
+        this.maxAmount = '';
+        this.closeDateFrom = '';
+        this.closeDateTo = '';
+
+        this.appliedMinAmount = null;
+        this.appliedMaxAmount = null;
+        this.appliedCloseDateFrom = null;
+        this.appliedCloseDateTo = null;
+
+        this.currentPage = 1;
+        this.loadOpportunities();
+    }
+
+
     handleNameChange(event) {
         this.newName = event.target.value;
     }
 
     handleAmountChange(event) {
-        this.newAmount = event.target.value === '' ? null : Number(event.target.value);
+        this.newAmount =
+            event.target.value === '' ? null : Number(event.target.value);
     }
 
     handleCloseDateChange(event) {
@@ -336,11 +603,15 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
         this.newStage = event.detail.value;
     }
 
-    // CREATE OPPORTUNITY
+    // Create an opportunity.
     async handleCreate() {
         const inputs = [
-            ...this.template.querySelectorAll('lightning-input, lightning-combobox')
-        ].filter((input) => input.closest('section[role="dialog"]'));
+            ...this.template.querySelectorAll(
+                'lightning-input, lightning-combobox'
+            )
+        ].filter((input) =>
+            input.closest('section[role="dialog"]')
+        );
 
         const valid = inputs.reduce((isValid, input) => {
             input.reportValidity();
@@ -357,6 +628,7 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
         }
 
         this.isSaving = true;
+
         try {
             await createOpportunity({
                 name: this.newName,
@@ -365,7 +637,12 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
                 stageName: this.newStage
             });
 
-            this.showToast('Success', 'Opportunity created successfully.', 'success');
+            this.showToast(
+                'Success',
+                'Opportunity created successfully.',
+                'success'
+            );
+
             this.newName = '';
             this.newAmount = null;
             this.newStage = 'Prospecting';
@@ -374,7 +651,7 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
             this.newCloseDate = this.getTodayDate();
 
             await Promise.all([
-                refreshApex(this.wiredOpportunitiesResult),
+                this.loadOpportunities(),
                 refreshApex(this._wiredMetricsResult),
                 refreshApex(this._wiredStageAnalyticsResult)
             ]);
@@ -389,13 +666,23 @@ export default class OpportunityDashboard extends NavigationMixin(LightningEleme
         }
     }
 
-    // ERROR HANDLING
+    // Error handling.
     getErrorMessage(error) {
-        return error?.body?.message || error?.message || 'An unexpected error occurred.';
+        return (
+            error?.body?.message ||
+            error?.message ||
+            'An unexpected error occurred.'
+        );
     }
 
-    // TOAST NOTIFICATIONS
+    // Toast notifications.
     showToast(title, message, variant) {
-        this.dispatchEvent(new ShowToastEvent({ title, message, variant }));
+        this.dispatchEvent(
+            new ShowToastEvent({
+                title,
+                message,
+                variant
+            })
+        );
     }
 }
