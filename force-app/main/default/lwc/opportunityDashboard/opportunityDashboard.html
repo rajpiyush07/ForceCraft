@@ -1,0 +1,510 @@
+
+<template>
+    <lightning-card title="Opportunity Dashboard" icon-name="standard:opportunity">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium dashboard-container">
+
+            <!-- KPI CARDS -->
+            <div class="slds-grid slds-wrap slds-gutters kpi-grid">
+                <!-- TOTAL OPPORTUNITIES -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_small">
+                    <article class="kpi-card kpi-orange">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <lightning-icon icon-name="standard:opportunity" size="small" alternative-text="Opportunities"></lightning-icon>
+                            </div>
+                            <span class="kpi-label">Total Opportunities</span>
+                            <lightning-icon icon-name="utility:chevronright" size="xx-small" alternative-text="Overview"></lightning-icon>
+                        </div>
+                        <div class="kpi-value">
+                            <lightning-formatted-number value={metrics.totalOpportunities} maximum-fraction-digits="0"></lightning-formatted-number>
+                        </div>
+                        <div class="mini-bars" aria-hidden="true">
+                            <span style="--bar-height: 35%"></span>
+                            <span style="--bar-height: 55%"></span>
+                            <span style="--bar-height: 43%"></span>
+                            <span style="--bar-height: 72%"></span>
+                            <span style="--bar-height: 61%"></span>
+                            <span style="--bar-height: 86%"></span>
+                            <span style="--bar-height: 68%"></span>
+                            <span style="--bar-height: 100%"></span>
+                        </div>
+                        <div class="kpi-footer">
+                            <span>Opportunity portfolio</span>
+                            <lightning-icon icon-name="utility:groups" size="xx-small" alternative-text="Portfolio"></lightning-icon>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- PIPELINE AMOUNT -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_small">
+                    <article class="kpi-card kpi-blue">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <lightning-icon icon-name="utility:money" size="small" alternative-text="Pipeline amount"></lightning-icon>
+                            </div>
+                            <span class="kpi-label">Total Pipeline Amount</span>
+                            <lightning-icon icon-name="utility:chevronright" size="xx-small" alternative-text="Overview"></lightning-icon>
+                        </div>
+                        <div class="kpi-value kpi-currency">
+                            <lightning-formatted-number value={metrics.totalPipelineAmount} format-style="currency" currency-code="INR" maximum-fraction-digits="0"></lightning-formatted-number>
+                        </div>
+                        <div class="mini-bars" aria-hidden="true">
+                            <span style="--bar-height: 48%"></span>
+                            <span style="--bar-height: 34%"></span>
+                            <span style="--bar-height: 64%"></span>
+                            <span style="--bar-height: 54%"></span>
+                            <span style="--bar-height: 82%"></span>
+                            <span style="--bar-height: 69%"></span>
+                            <span style="--bar-height: 91%"></span>
+                            <span style="--bar-height: 100%"></span>
+                        </div>
+                        <div class="kpi-footer">
+                            <span>Opportunity value summary</span>
+                            <lightning-icon icon-name="utility:wallet" size="xx-small" alternative-text="Value"></lightning-icon>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- CLOSED WON REVENUE -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_small">
+                    <article class="kpi-card kpi-green">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <lightning-icon icon-name="utility:success" size="small" alternative-text="Closed won"></lightning-icon>
+                            </div>
+                            <span class="kpi-label">Closed Won Revenue</span>
+                            <lightning-icon icon-name="utility:chevronright" size="xx-small" alternative-text="Overview"></lightning-icon>
+                        </div>
+                        <div class="kpi-value kpi-currency">
+                            <lightning-formatted-number value={metrics.closedWonRevenue} format-style="currency" currency-code="INR" maximum-fraction-digits="0"></lightning-formatted-number>
+                        </div>
+                        <div class="kpi-progress-track" aria-hidden="true">
+                            <div class="kpi-progress-fill"></div>
+                        </div>
+                        <div class="kpi-footer">
+                            <span>Closed-won revenue total</span>
+                            <lightning-icon icon-name="utility:check" size="xx-small" alternative-text="Won"></lightning-icon>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- OPEN OPPORTUNITIES -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4 slds-m-bottom_small">
+                    <article class="kpi-card kpi-purple">
+                        <div class="kpi-header">
+                            <div class="kpi-icon">
+                                <lightning-icon icon-name="utility:trending" size="small" alternative-text="Open opportunities"></lightning-icon>
+                            </div>
+                            <span class="kpi-label">Open Opportunities</span>
+                            <lightning-icon icon-name="utility:chevronright" size="xx-small" alternative-text="Overview"></lightning-icon>
+                        </div>
+                        <div class="kpi-value">
+                            <lightning-formatted-number value={metrics.openOpportunities} maximum-fraction-digits="0"></lightning-formatted-number>
+                        </div>
+                        <div class="mini-bars" aria-hidden="true">
+                            <span style="--bar-height: 66%"></span>
+                            <span style="--bar-height: 45%"></span>
+                            <span style="--bar-height: 78%"></span>
+                            <span style="--bar-height: 57%"></span>
+                            <span style="--bar-height: 89%"></span>
+                            <span style="--bar-height: 71%"></span>
+                            <span style="--bar-height: 96%"></span>
+                            <span style="--bar-height: 82%"></span>
+                        </div>
+                        <div class="kpi-footer">
+                            <span>Currently open deals</span>
+                            <lightning-icon icon-name="utility:chart" size="xx-small" alternative-text="Open deals"></lightning-icon>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- STAGE ANALYTICS -->
+            <div class="slds-grid slds-wrap slds-gutters analytics-grid">
+                <!-- OPPORTUNITY COUNT BY STAGE -->
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-m-bottom_medium">
+                    <section class="analytics-card" aria-label="Opportunity count by stage">
+                        <div class="analytics-header">
+                            <h2 class="analytics-title">Opportunity Count by Stage</h2>
+                            <p class="analytics-subtitle">Number of opportunities in each sales stage</p>
+                        </div>
+
+                        <template if:true={isAnalyticsLoading}>
+                            <lightning-spinner alternative-text="Loading stage analytics" size="small"></lightning-spinner>
+                        </template>
+
+                        <template if:true={analyticsError}>
+                            <p class="analytics-error">Unable to load opportunity count analytics.</p>
+                        </template>
+
+                        <template if:true={hasStageAnalytics}>
+                            <div class="analytics-chart">
+                                <template for:each={stageCountChart} for:item="item">
+                                    <div key={item.stageName} class="analytics-row">
+                                        <div class="analytics-row-header">
+                                            <span class="analytics-stage">{item.stageName}</span>
+                                            <span class="analytics-value">{item.countLabel}</span>
+                                        </div>
+                                        <div class="analytics-track" role="img" aria-label={item.stageName}>
+                                            <div class="analytics-bar" style={item.barStyle}></div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:false={hasStageAnalytics}>
+                            <template if:false={isAnalyticsLoading}>
+                                <template if:false={analyticsError}>
+                                    <p class="analytics-empty">No stage data is available yet.</p>
+                                </template>
+                            </template>
+                        </template>
+                    </section>
+                </div>
+
+                <!-- PIPELINE AMOUNT BY STAGE -->
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-m-bottom_medium">
+                    <section class="analytics-card" aria-label="Pipeline amount by stage">
+                        <div class="analytics-header">
+                            <h2 class="analytics-title">Pipeline Amount by Stage</h2>
+                            <p class="analytics-subtitle">Total opportunity amount grouped by sales stage</p>
+                        </div>
+
+                        <template if:true={isAnalyticsLoading}>
+                            <lightning-spinner alternative-text="Loading pipeline amount analytics" size="small"></lightning-spinner>
+                        </template>
+
+                        <template if:true={analyticsError}>
+                            <p class="analytics-error">Unable to load pipeline amount analytics.</p>
+                        </template>
+
+                        <template if:true={hasStageAnalytics}>
+                            <div class="analytics-chart">
+                                <template for:each={stageAmountChart} for:item="item">
+                                    <div key={item.stageName} class="analytics-row">
+                                        <div class="analytics-row-header">
+                                            <span class="analytics-stage">{item.stageName}</span>
+                                            <span class="analytics-value">{item.amountLabel}</span>
+                                        </div>
+                                        <div class="analytics-track" role="img" aria-label={item.stageName}>
+                                            <div class="analytics-bar analytics-bar-amount" style={item.barStyle}></div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:false={hasStageAnalytics}>
+                            <template if:false={isAnalyticsLoading}>
+                                <template if:false={analyticsError}>
+                                    <p class="analytics-empty">No stage data is available yet.</p>
+                                </template>
+                            </template>
+                        </template>
+                    </section>
+                </div>
+            </div>
+
+            <!-- SEARCH, FILTER, AND SORT -->
+            <div class="slds-grid slds-wrap slds-gutters slds-m-top_medium slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                    <lightning-input
+                        type="search"
+                        label="Search opportunities"
+                        value={searchKey}
+                        onchange={handleSearch}
+                        placeholder="Search by opportunity name">
+                    </lightning-input>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                    <lightning-combobox
+                        label="Filter by stage"
+                        value={stageName}
+                        options={stageOptions}
+                        onchange={handleStageChange}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                    <lightning-combobox
+                        label="Sort opportunities by"
+                        value={sortBy}
+                        options={sortOptions}
+                        onchange={handleSortChange}>
+                    </lightning-combobox>
+                </div>
+
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
+                    <lightning-button
+                        class="slds-m-top_large"
+                        label={sortDirectionLabel}
+                        icon-name="utility:sort"
+                        onclick={handleSortDirectionChange}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- NEW OPPORTUNITY BUTTON -->
+            <div class="slds-grid slds-grid_align-end slds-m-bottom_large">
+                <lightning-button
+                    label="New Opportunity"
+                    title="Create a new opportunity"
+                    icon-name="utility:add"
+                    variant="brand"
+                    onclick={handleOpenCreateForm}>
+                </lightning-button>
+            </div>
+
+            <!-- CREATE OPPORTUNITY MODAL -->
+            <template if:true={isCreateFormOpen}>
+                <section
+                    role="dialog"
+                    tabindex="-1"
+                    aria-modal="true"
+                    aria-labelledby="create-opportunity-heading"
+                    class="slds-modal slds-fade-in-open">
+
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <lightning-button-icon
+                                icon-name="utility:close"
+                                alternative-text="Close"
+                                title="Close"
+                                variant="bare"
+                                class="slds-modal__close"
+                                onclick={handleCancelCreate}
+                                disabled={isSaving}>
+                            </lightning-button-icon>
+
+                            <h2 id="create-opportunity-heading" class="slds-text-heading_medium">
+                                New Opportunity
+                            </h2>
+                            <p class="slds-m-top_x-small slds-text-color_weak">
+                                Enter the opportunity details below.
+                            </p>
+                        </header>
+
+                        <div class="slds-modal__content slds-p-around_medium">
+                            <template if:true={isSaving}>
+                                <lightning-spinner alternative-text="Creating opportunity" size="small"></lightning-spinner>
+                            </template>
+
+                            <div class="slds-grid slds-wrap slds-gutters">
+                                <div class="slds-col slds-size_1-of-1">
+                                    <lightning-input
+                                        label="Opportunity Name"
+                                        value={newName}
+                                        required
+                                        onchange={handleNameChange}>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_medium">
+                                    <lightning-input
+                                        type="number"
+                                        label="Amount"
+                                        value={newAmount}
+                                        min="0"
+                                        step="0.01"
+                                        formatter="currency"
+                                        onchange={handleAmountChange}>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-m-top_medium">
+                                    <lightning-input
+                                        type="date"
+                                        label="Close Date"
+                                        value={newCloseDate}
+                                        required
+                                        onchange={handleCloseDateChange}>
+                                    </lightning-input>
+                                </div>
+
+                                <div class="slds-col slds-size_1-of-1 slds-m-top_medium">
+                                    <lightning-combobox
+                                        label="Stage"
+                                        value={newStage}
+                                        options={createStageOptions}
+                                        required
+                                        onchange={handleNewStageChange}>
+                                    </lightning-combobox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <footer class="slds-modal__footer">
+                            <lightning-button
+                                label="Cancel"
+                                variant="neutral"
+                                onclick={handleCancelCreate}
+                                disabled={isSaving}>
+                            </lightning-button>
+
+                            <lightning-button
+                                class="slds-m-left_small"
+                                label="Create Opportunity"
+                                variant="brand"
+                                onclick={handleCreate}
+                                disabled={isSaving}>
+                            </lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+
+            <!-- OPPORTUNITY LIST HEADER -->
+            <div class="slds-grid slds-wrap slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_medium">
+                <div>
+                    <h2 class="slds-text-heading_medium">Opportunities</h2>
+                    <p class="slds-text-color_weak slds-text-body_small">
+                        {recordCountLabel}
+                    </p>
+                </div>
+
+
+            </div>
+
+            <!-- PAGINATION CONTROLS -->
+            <div class="slds-grid slds-wrap slds-grid_align-spread slds-grid_vertical-align-center slds-m-bottom_medium">
+                <p class="slds-text-body_small slds-text-color_weak">{paginationLabel}</p>
+                <div class="slds-grid slds-grid_vertical-align-center">
+                    <lightning-button
+                        label="Previous"
+                        icon-name="utility:chevronleft"
+                        onclick={handlePreviousPage}
+                        disabled={isFirstPage}>
+                    </lightning-button>
+                    <span class="slds-m-horizontal_small">Page {currentPage} of {totalPages}</span>
+                    <lightning-button
+                        label="Next"
+                        icon-name="utility:chevronright"
+                        icon-position="right"
+                        onclick={handleNextPage}
+                        disabled={isLastPage}>
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- LOADING -->
+            <template if:true={isLoading}>
+                <lightning-spinner alternative-text="Loading opportunities" size="medium"></lightning-spinner>
+            </template>
+
+            <!-- OPPORTUNITY CARDS -->
+            <template if:true={hasRecords}>
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <template for:each={displayedOpportunities} for:item="opp">
+                        <div key={opp.Id} class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-m-bottom_medium">
+                            <article class="slds-card slds-card_boundary opportunity-card">
+                                <div class="slds-card__header slds-grid">
+                                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                                        <div class="slds-media__figure">
+                                            <lightning-icon icon-name="standard:opportunity" size="small"></lightning-icon>
+                                        </div>
+
+                                        <div class="slds-media__body">
+                                            <h3 class="slds-card__header-title">
+                                                <span class="slds-truncate" title={opp.Name}>{opp.Name}</span>
+                                            </h3>
+                                            <p class="slds-text-body_small slds-text-color_weak slds-truncate">
+                                                {opp.accountName}
+                                            </p>
+                                        </div>
+
+                                        <div class="slds-no-flex">
+                                            <lightning-badge label={opp.StageName}></lightning-badge>
+                                        </div>
+                                    </header>
+                                </div>
+
+                                <div class="slds-card__body slds-card__body_inner">
+                                    <div class="slds-grid slds-wrap slds-gutters_small">
+                                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                                            <p class="slds-text-color_weak slds-text-body_small">Amount</p>
+                                            <p class="slds-text-heading_medium">
+                                                <lightning-formatted-number value={opp.Amount} format-style="currency" currency-code="INR" maximum-fraction-digits="2"></lightning-formatted-number>
+                                            </p>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-2 slds-m-bottom_medium">
+                                            <p class="slds-text-color_weak slds-text-body_small">Close Date</p>
+                                            <p>
+                                                <lightning-formatted-date-time value={opp.CloseDate} year="numeric" month="short" day="2-digit" time-zone="UTC"></lightning-formatted-date-time>
+                                            </p>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <p class="slds-text-color_weak slds-text-body_small">Probability</p>
+                                            <p>
+                                                <lightning-formatted-number value={opp.Probability} format-style="percent" maximum-fraction-digits="0"></lightning-formatted-number>
+                                            </p>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-2">
+                                            <p class="slds-text-color_weak slds-text-body_small">Opportunity ID</p>
+                                            <p class="slds-truncate" title={opp.Id}>{opp.Id}</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- EXPANDED DETAILS -->
+                                    <template if:true={opp.isExpanded}>
+                                        <div class="slds-border_top slds-m-top_medium slds-p-top_medium">
+                                            <h3 class="slds-text-heading_small slds-m-bottom_small">Opportunity Details</h3>
+                                            <dl class="slds-list_horizontal slds-wrap">
+                                                <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Name</dt>
+                                                <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">{opp.Name}</dd>
+
+                                                <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Account</dt>
+                                                <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">{opp.accountName}</dd>
+
+                                                <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Stage</dt>
+                                                <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">{opp.StageName}</dd>
+
+                                                <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Amount</dt>
+                                                <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">
+                                                    <lightning-formatted-number value={opp.Amount} format-style="currency" currency-code="INR"></lightning-formatted-number>
+                                                </dd>
+
+                                                <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Close Date</dt>
+                                                <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">{opp.CloseDate}</dd>
+
+                                                <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Probability</dt>
+                                                <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">
+                                                    <lightning-formatted-number value={opp.Probability} format-style="percent" maximum-fraction-digits="0"></lightning-formatted-number>
+                                                </dd>
+
+                                                <dt class="slds-item_label slds-text-color_weak slds-size_1-of-3">Record ID</dt>
+                                                <dd class="slds-item_detail slds-size_2-of-3 slds-m-bottom_small">{opp.Id}</dd>
+                                            </dl>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <footer class="slds-card__footer slds-text-align_right">
+                                    <lightning-button label={opp.detailsButtonLabel} variant="base" data-id={opp.Id} onclick={handleToggleDetails}></lightning-button>
+                                    <lightning-button class="slds-m-left_small" label="Open Record" variant="brand-outline" data-id={opp.Id} onclick={handleOpenRecord}></lightning-button>
+                                </footer>
+                            </article>
+                        </div>
+                    </template>
+                </div>
+            </template>
+
+            <!-- EMPTY STATE -->
+            <template if:false={hasRecords}>
+                <template if:false={isLoading}>
+                    <div class="slds-box slds-theme_default slds-text-align_center slds-p-around_large">
+                        <lightning-icon icon-name="utility:search" size="medium" alternative-text="No results"></lightning-icon>
+                        <p class="slds-text-heading_small slds-m-top_small">No opportunities found</p>
+                        <p class="slds-text-color_weak">Try changing your search term or stage filter.</p>
+                    </div>
+                </template>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

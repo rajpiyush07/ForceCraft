@@ -1,0 +1,326 @@
+
+.dashboard-container {
+    padding-top: 0.75rem;
+}
+
+.kpi-grid {
+    margin-top: 0.5rem;
+}
+
+.kpi-card {
+    position: relative;
+    min-height: 210px;
+    padding: 1rem;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.85rem;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.045);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.10);
+}
+
+.kpi-header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #64748b;
+}
+
+.kpi-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    border-radius: 0.7rem;
+    background: rgba(255, 255, 255, 0.75);
+}
+
+.kpi-label {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #475569;
+}
+
+.kpi-value {
+    margin-top: 0.85rem;
+    color: #172033;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+    overflow-wrap: anywhere;
+}
+
+.kpi-currency {
+    font-size: 1.45rem;
+    letter-spacing: -0.035em;
+}
+
+.kpi-orange {
+    background: linear-gradient(145deg, #fff7ed 0%, #ffffff 74%);
+    border-top: 3px solid #f97316;
+}
+
+.kpi-blue {
+    background: linear-gradient(145deg, #eff6ff 0%, #ffffff 74%);
+    border-top: 3px solid #3b82f6;
+}
+
+.kpi-green {
+    background: linear-gradient(145deg, #ecfdf5 0%, #ffffff 74%);
+    border-top: 3px solid #16a34a;
+}
+
+.kpi-purple {
+    background: linear-gradient(145deg, #f5f3ff 0%, #ffffff 74%);
+    border-top: 3px solid #8b5cf6;
+}
+
+.kpi-orange .kpi-icon {
+    background: #ffedd5;
+}
+
+.kpi-blue .kpi-icon {
+    background: #dbeafe;
+}
+
+.kpi-green .kpi-icon {
+    background: #dcfce7;
+}
+
+.kpi-purple .kpi-icon {
+    background: #ede9fe;
+}
+
+.kpi-orange .kpi-icon lightning-icon {
+    --slds-c-icon-color-foreground-default: #ea580c;
+}
+
+.kpi-blue .kpi-icon lightning-icon {
+    --slds-c-icon-color-foreground-default: #2563eb;
+}
+
+.kpi-green .kpi-icon lightning-icon {
+    --slds-c-icon-color-foreground-default: #15803d;
+}
+
+.kpi-purple .kpi-icon lightning-icon {
+    --slds-c-icon-color-foreground-default: #7c3aed;
+}
+
+.mini-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.38rem;
+    height: 42px;
+    margin-top: 0.8rem;
+    padding: 0 0.1rem;
+}
+
+.mini-bars span {
+    display: block;
+    flex: 1;
+    height: var(--bar-height);
+    min-width: 5px;
+    border-radius: 4px 4px 1px 1px;
+    opacity: 0.8;
+    animation: bar-appear 0.55s ease both;
+}
+
+.kpi-orange .mini-bars span {
+    background: linear-gradient(180deg, #fb923c, #f97316);
+}
+
+.kpi-blue .mini-bars span {
+    background: linear-gradient(180deg, #60a5fa, #2563eb);
+}
+
+.kpi-purple .mini-bars span {
+    background: linear-gradient(180deg, #a78bfa, #7c3aed);
+}
+
+.kpi-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.7rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.22);
+    color: #64748b;
+    font-size: 0.7rem;
+}
+
+.kpi-progress-track {
+    height: 8px;
+    margin-top: 1.55rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #dcfce7;
+}
+
+.kpi-progress-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #4ade80, #15803d);
+}
+
+.opportunity-card {
+    height: 100%;
+    border-radius: 0.65rem;
+    transition: box-shadow 0.2s ease;
+}
+
+.opportunity-card:hover {
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.08);
+}
+
+/* STAGE ANALYTICS */
+
+.analytics-grid {
+    margin-top: 1.5rem;
+}
+
+.analytics-card {
+    height: 100%;
+    padding: 1.25rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.85rem;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.045);
+}
+
+.analytics-header {
+    margin-bottom: 1.25rem;
+}
+
+.analytics-title {
+    color: #172033;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.analytics-subtitle {
+    margin-top: 0.25rem;
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+.analytics-row {
+    margin-bottom: 1rem;
+}
+
+.analytics-row:last-child {
+    margin-bottom: 0;
+}
+
+.analytics-row-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+}
+
+.analytics-stage {
+    color: #475569;
+    font-size: 0.8rem;
+    overflow-wrap: anywhere;
+}
+
+.analytics-value {
+    flex-shrink: 0;
+    color: #172033;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+.analytics-track {
+    height: 9px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #f1f5f9;
+}
+
+.analytics-bar {
+    height: 100%;
+    min-width: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #60a5fa, #2563eb);
+    transition: width 0.4s ease;
+}
+
+.analytics-bar-amount {
+    background: linear-gradient(90deg, #a78bfa, #7c3aed);
+}
+
+.analytics-empty {
+    padding: 1.5rem 0.5rem;
+    color: #64748b;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.analytics-error {
+    color: #b91c1c;
+    font-size: 0.85rem;
+}
+
+/* ANIMATIONS */
+
+@keyframes bar-appear {
+    from {
+        opacity: 0.2;
+        transform: scaleY(0.55);
+        transform-origin: bottom;
+    }
+
+    to {
+        opacity: 0.8;
+        transform: scaleY(1);
+        transform-origin: bottom;
+    }
+}
+
+/* RESPONSIVE LAYOUT */
+
+@media (max-width: 48rem) {
+    .kpi-card {
+        min-height: 195px;
+    }
+
+    .kpi-value {
+        font-size: 1.8rem;
+    }
+
+    .kpi-currency {
+        font-size: 1.25rem;
+    }
+
+    .analytics-card {
+        padding: 1rem;
+    }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+    .kpi-card,
+    .mini-bars span,
+    .analytics-bar {
+        animation: none;
+        transition: none;
+    }
+}
