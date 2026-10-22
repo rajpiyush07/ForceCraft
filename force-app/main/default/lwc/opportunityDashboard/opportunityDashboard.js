@@ -8,6 +8,7 @@ import createOpportunity from '@salesforce/apex/OpportunityDashboardController.c
 import getOpportunityMetrics from '@salesforce/apex/OpportunityDashboardController.getOpportunityMetrics';
 import getOpportunityStageAnalytics from '@salesforce/apex/OpportunityDashboardController.getOpportunityStageAnalytics';
 
+
 const STAGES = [
     { label: 'Prospecting', value: 'Prospecting' },
     { label: 'Qualification', value: 'Qualification' },
@@ -21,21 +22,22 @@ const STAGES = [
     { label: 'Closed Lost', value: 'Closed Lost' }
 ];
 
-    const DONUT_COLORS = [
-            '#2563eb',
-            '#7c3aed',
-            '#0d9488',
-            '#ea580c',
-            '#db2777',
-            '#0891b2',
-            '#65a30d',
-            '#9333ea',
-            '#ca8a04',
-            '#64748b'
-        ];
-    
+const DONUT_COLORS = [
+    '#2563eb',
+    '#7c3aed',
+    '#0d9488',
+    '#ea580c',
+    '#db2777',
+    '#0891b2',
+    '#65a30d',
+    '#9333ea',
+    '#ca8a04',
+    '#64748b'
+];
 
 export default class OpportunityDashboard extends NavigationMixin(LightningElement) {
+ 
+   
     searchKey = '';
     stageName = 'All';
     opportunities = [];
