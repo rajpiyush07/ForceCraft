@@ -624,7 +624,7 @@ The Monetary Commitment model defines a committed monetary amount for usage duri
 
 
 
-==========================================================================================================================================================================================================================================================================================================================================
+======================================================================================================================================================================================================================================================================================================================================================================================================
 
 
 
@@ -690,3 +690,69 @@ A **Pricing Procedure** defines the sequence of steps used to calculate the fina
 **Rate Card → Rate Card Entry → Tier / Attribute Adjustments → Pricing Procedure → Final Calculated Price**
 
 These concepts help manage usage-based pricing and configure pricing calculations in Salesforce Revenue Cloud.
+
+
+======================================================================================================================================================================================================================================================================================================================================================================================================
+
+
+
+                                      26/10/2026
+
+# Salesforce Revenue Cloud — Technical Note
+
+# 1. Order Management
+
+## Definition
+
+**Order Management** is the process of capturing, validating, processing, and tracking customer orders from order creation through fulfillment and completion.
+
+In Salesforce Revenue Cloud, Order Management connects the commercial transaction with downstream fulfillment processes and helps ensure that customers receive the products or services they purchased.
+
+## Types of Order Management
+
+Order Management can be classified by the business process involved:
+
+- **Sales Order Management:** Capturing and processing customer purchases.
+- **Subscription Order Management:** Processing recurring or term-based products and services.
+- **Change Order Management:** Handling supported changes to existing orders.
+- **Return Order Management:** Processing eligible product returns and associated transactions.
+- **Fulfillment Order Management:** Coordinating delivery, provisioning, or activation of products and services.
+
+*Note: These are common order-management process categories, not necessarily separate standard Salesforce object types.*
+
+# 2. Dynamic Revenue Orchestration (DRO)
+
+## Definition
+
+**Dynamic Revenue Orchestration (DRO)** coordinates complex order fulfillment by decomposing commercial orders into fulfillment tasks and dynamically managing their execution across connected systems.
+
+DRO helps organizations execute complex product and service deliveries using dependencies, orchestration plans, and fulfillment processes.
+
+## Core Components of DRO
+
+### 1. Order Decomposition
+Breaks a commercial order into service-specific or product-specific fulfillment components.
+
+### 2. Fulfillment
+Executes the work required to deliver or activate the ordered products and services.
+
+### 3. Order Orchestration
+Coordinates fulfillment activities, dependencies, execution order, and completion status.
+
+
+# 3. Asset Management
+
+## Definition
+
+**Asset Management** tracks products or services that a customer owns, has purchased, or is entitled to use, according to the product and asset lifecycle configuration.
+
+In Salesforce Revenue Cloud, asset lifecycle management supports eligible commercial changes and provides visibility into the customer's installed or active product base.
+ed Base | The collection of products or services associated with a customer. |
+
+# 4. Renewal Management
+
+## Definition
+
+**Renewal Management** manages the continuation of eligible contracts, subscriptions, or term-based entitlements into a new term after the current term expires.
+
+Renewals support recurring revenue, customer retention, and the continuation of contracted products or services.
