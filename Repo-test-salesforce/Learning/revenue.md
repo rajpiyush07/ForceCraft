@@ -756,3 +756,35 @@ ed Base | The collection of products or services associated with a customer. |
 **Renewal Management** manages the continuation of eligible contracts, subscriptions, or term-based entitlements into a new term after the current term expires.
 
 Renewals support recurring revenue, customer retention, and the continuation of contracted products or services.
+
+
+
+
+======================================================================================================================================================================================================================================================================================================================================================================================================
+
+
+                                    29/10/2026
+
+# Salesforce Revenue Cloud – Transaction Management & Billing
+
+## 1. Transaction Management
+- **Transaction Management:** Manages commercial transactions and transaction line processing.
+- **Transaction Line Editor (TLE):** Configures and organizes transaction lines using groups for improved usability.
+- **Transaction Configuration:** Supports structured transaction processing in Revenue Cloud.
+
+## 2. Salesforce Billing
+- **Permission Sets:** Control user access to Salesforce Billing features and objects.
+- **Billing & Tax Object Model:** Defines relationships between billing transactions, invoices, invoice lines, and tax-related records.
+- **Billing Policies:** Define rules governing billing behavior and processing.
+- **Billing Treatments & Treatment Items:** Configure billing-specific processing rules for applicable transaction items.
+
+## 3. Billing Schedules & Invoicing
+- **Billing Schedules:** Define when and how billing amounts are scheduled for invoicing.
+- **Billing Schedule Groups:** Organize related billing schedules for easier management.
+- **Invoice Generation:** Automates invoice creation based on configured billing schedules and processes.
+- **Payment Terms & Term Items:** Define payment due dates and payment conditions.
+
+## 4. Payments & Invoice Settlement
+- **Payment Management:** Tracks payments and their association with invoices.
+- **Invoice Lines:** Represent individual products, services, and charges within an invoice.
+- **Invoice Settlement:** Manages the process of applying payments and resolving outstanding invoice balances.
