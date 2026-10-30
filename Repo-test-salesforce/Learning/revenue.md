@@ -788,3 +788,277 @@ Renewals support recurring revenue, customer retention, and the continuation of 
 - **Payment Management:** Tracks payments and their association with invoices.
 - **Invoice Lines:** Represent individual products, services, and charges within an invoice.
 - **Invoice Settlement:** Manages the process of applying payments and resolving outstanding invoice balances.
+
+
+
+
+====================================================================================================================================================================================================================================================================================================================================================================================
+
+
+                            30/10/2026
+
+
+
+Salesforce Revenue Cloud – Billing Object Model (Detailed Notes)
+The Salesforce Billing Object Model defines how products, orders, billing policies, billing schedules, invoices, payments, and credit memos work together to manage the complete customer billing lifecycle.
+
+The main objective is to convert a customer's purchase into billable transactions, generate accurate invoices, collect payments, and manage adjustments.
+1. Product
+Product represents the goods or services that a company sells to its customers.
+- Products are created in the Product Catalog.
+- Each product has details such as Product Name, Product Code, Description, and Active Status.
+- Products can have different pricing methods and billing configurations.
+- Products can be standalone or part of a product bundle.
+- Product configuration determines how the product is ordered and eventually billed.
+Example:
+
+A telecom company offers:
+- Internet Plan – ₹999/month.
+- Installation Service – ₹2,000 one-time.
+- Premium Support – ₹499/month.
+Each of these is a separate product with its own pricing and billing behavior.
+2. Billing Policy
+Billing Policy defines the billing configuration and rules that determine how a customer's purchased products are billed.
+- Defines applicable billing behavior for products or orders.
+- Helps control billing-related configurations.
+- Supports different billing requirements based on business processes.
+- Helps maintain consistency in billing operations.
+Real-world example:
+
+A company sells three products:
+- Internet Subscription – Monthly billing.
+- Installation Service – One-time billing.
+- Premium Support – Annual billing.
+The billing configuration needs to support different billing frequencies and charge types.
+
+Important: Do not confuse a Billing Policy with a Product or Price Book. A product defines what is sold, pricing defines how much it costs, and billing configuration determines how and when charges are billed.
+3. Order
+Order represents the customer's confirmed purchase of products or services.
+- An order is generally created after the quote is accepted.
+- It contains customer purchase information.
+- It is associated with an Account.
+- It contains Order Products.
+- It represents the commercial commitment between the company and customer.
+- Orders can progress through different statuses depending on the business process.
+Example:
+
+A customer purchases:
+- Internet Plan – ₹999/month.
+- Installation – ₹2,000.
+- Premium Support – ₹499/month.
+Salesforce creates an Order containing these purchased products.
+4. Order Product (Order Item)
+Order Product represents an individual product or service included in an order.
+
+It connects the Order with the Product.
+
+Important information includes:
+- Product
+- Quantity
+- Unit Price
+- Total Price
+- Start Date
+- End Date
+- Service-related information
+Example:
+
+An order contains three Order Products:
+Product	Quantity	Price
+Internet Plan	1	₹999
+Installation	1	₹2,000
+Premium Support	1	₹499
+
+Each line represents a separate purchased item.
+5. Billing Schedule
+A Billing Schedule determines when a particular charge should be billed.
+
+Depending on the billing configuration, billing can be:
+- One-time billing.
+- Monthly billing.
+- Quarterly billing.
+- Half-yearly billing.
+- Annual billing.
+- Milestone-based billing.
+Example:
+
+A customer purchases a one-year subscription worth ₹12,000.
+
+The company can generate 12 monthly charges of ₹1,000 instead of charging the entire amount upfront, depending on the configured billing process.
+6. Invoice
+An Invoice is a financial document generated to request payment from the customer for purchased products or services.
+
+It contains:
+- Invoice Number.
+- Account Information.
+- Invoice Date.
+- Due Date.
+- Total Amount.
+- Tax Amount.
+- Invoice Status.
+- Payment information.
+Example:
+
+A customer receives an invoice:
+Description	Amount
+Internet Plan	₹999
+Premium Support	₹499
+Installation	₹2,000
+Total	₹3,498
+
+The invoice represents the amount the customer needs to pay.
+7. Invoice Line
+Invoice Line represents an individual charge included in an invoice.
+- Each invoice can contain multiple invoice lines.
+- Each line represents a billed product or service.
+- It contains quantity, price, tax, and charge information.
+- It helps identify exactly what the customer is paying for.
+Example:
+
+An invoice has three invoice lines:
+1. Internet Subscription – ₹999.
+2. Premium Support – ₹499.
+3. Installation – ₹2,000.
+The invoice combines all three lines into one payable amount.
+8. Payment
+Payment represents the money received from a customer against an invoice.
+- Tracks the amount received.
+- Maintains payment status.
+- Helps reconcile customer payments with invoices.
+- Supports full and partial payment scenarios, depending on configuration.
+Example:
+
+A customer has an invoice of ₹3,498.
+- First payment: ₹2,000.
+- Second payment: ₹1,498.
+After both payments are successfully applied, the invoice can be marked as paid.
+9. Credit Memo
+A Credit Memo is a financial document used to reduce or reverse an amount previously invoiced to a customer.
+
+Common use cases:
+- Product returns.
+- Incorrect billing.
+- Overcharging.
+- Service cancellations.
+- Discounts or billing adjustments.
+Example:
+
+A customer receives an invoice of ₹10,000, but the company discovers that ₹2,000 was charged incorrectly.
+
+The company generates a Credit Memo for ₹2,000, reducing the customer's outstanding balance.
+10. Credit Memo Line
+Credit Memo Line represents the individual adjustment or credit applied to a specific invoice line.
+
+Example:
+
+Original invoice:
+- Internet Service: ₹5,000.
+- Installation: ₹2,000.
+The company issues a credit of ₹1,000 against the Internet Service.
+
+The Credit Memo Line identifies the affected charge and its adjustment amount.
+11. Billing Treatment
+Billing Treatment defines how Salesforce Billing should invoice an Order Product.
+
+It controls how the order item's total value is billed during its lifecycle.
+
+Important concepts:
+- Determines whether an order item is included in billing.
+- Defines billing behavior.
+- Controls how the total amount is distributed across billing schedules.
+- Supports advance and arrears billing.
+- Can be used for different billing requirements.
+Example:
+
+A customer purchases a subscription worth ₹12,000 for 12 months.
+
+There are two possible billing approaches:
+- Monthly: ₹1,000 every month.
+- Annual: ₹12,000 in one billing period.
+The billing treatment determines how the order item's value is allocated for invoicing.
+Types of Billing
+Advance Billing: The customer is invoiced before receiving the service for the upcoming period.
+
+Example: The customer receives an invoice on January 1 for January's subscription.
+
+Arrears Billing: The customer is invoiced after receiving the service.
+
+Example: The customer receives an invoice on February 1 for the service consumed during January.
+12. Billing Treatment Item
+Billing Treatment Item defines how much of the Order Product's total amount should be invoiced at each billing stage.
+- It is associated with a Billing Treatment.
+- Defines the allocation of the order item's value.
+- Supports percentage-based and other billing allocation methods.
+- Processing Order determines the sequence in which billing treatment items are evaluated.
+Example:
+
+A customer purchases a product worth ₹10,000.
+
+The company wants to bill it in two milestones:
+- First milestone: 40% = ₹4,000.
+- Second milestone: 60% = ₹6,000.
+The Billing Treatment Items define these allocations.
+
+In Revenue Management Billing, the treatment configuration has specific constraints; for example, it requires a single treatment item covering 100% of the order item's total value. 
+Salesforce Help+1
+
+13. Billing Schedule Group
+A Billing Schedule Group provides a consolidated view of billing schedules associated with an asset and its related order items.
+- Groups related billing schedules.
+- Helps manage subscription billing.
+- Supports billing schedule management across new orders and amendments.
+- Helps control billing preferences such as billing dates and payment terms.
+- Supports invoice grouping and splitting.
+Example:
+
+A customer has purchased:
+- Internet Subscription.
+- Premium Support.
+- Additional Storage.
+Instead of managing all billing schedules independently, Salesforce can organize related schedules into a Billing Schedule Group.
+
+This makes billing operations easier to manage. 
+Salesforce Help+1
+
+14. Billing Frequency
+Billing Frequency determines how frequently the customer receives invoices.
+
+Common billing frequencies include:
+- Monthly.
+- Quarterly.
+- Half-yearly.
+- Annually.
+- Other configured billing intervals.
+Example:
+
+A customer purchases a subscription for ₹24,000 annually.
+
+Depending on the configured billing frequency:
+- Monthly: ₹2,000.
+- Quarterly: ₹6,000.
+- Half-yearly: ₹12,000.
+- Annually: ₹24,000.
+Important: Pricing Frequency and Billing Frequency can be different.
+
+For example, a product can be priced monthly but billed annually. Salesforce supports this configuration. 
+Salesforce Help+1
+
+15. Proration
+Proration means calculating charges based on the actual period for which a customer uses a product or service.
+
+It is commonly used when:
+- A subscription starts in the middle of a billing cycle.
+- A customer upgrades a subscription.
+- A customer downgrades a subscription.
+- A subscription is cancelled before the end date.
+Example:
+
+A customer purchases a monthly subscription worth ₹3,000.
+
+The subscription starts on January 16 instead of January 1.
+
+If the month has 30 days and the customer uses the service for 15 days:
+\[\text{Prorated Amount} = \frac{3000}{30}\times15\]
+
+\[= ₹1,500\]
+
+The customer is charged ₹1,500 for that partial period, assuming a daily proration method and no additional adjustments.
