@@ -1,0 +1,70 @@
+<template>
+    <lightning-card title="Choose Your Portfolio Template"
+                    icon-name="standard:template">
+
+        <div class="template-container">
+
+            <template lwc:if={hasTemplates}>
+                <div class="template-grid">
+
+                    <template for:each={templateCards}
+                              for:item="template">
+
+                        <div key={template.Id}
+                             class={template.cardClass}>
+
+                            <div class="template-content">
+
+                                <lightning-icon
+                                    icon-name="utility:palette"
+                                    size="large">
+                                </lightning-icon>
+
+                                <h2>{template.Name}</h2>
+
+                                <p>
+                                    {template.Template_Description__c}
+                                </p>
+
+                                <lightning-button
+                                    label="Select Template"
+                                    variant="brand"
+                                    data-id={template.Id}
+                                    onclick={handleSelect}>
+                                </lightning-button>
+
+                                <template lwc:if={template.isSelected}>
+                                    <p class="selected-label">
+                                        Selected
+                                    </p>
+                                </template>
+
+                            </div>
+                        </div>
+
+                    </template>
+                </div>
+            </template>
+
+            <template lwc:else>
+                <p>No active templates available.</p>
+            </template>
+
+            <template lwc:if={hasError}>
+                <p class="error-message">
+                    Unable to load templates. Please check permissions.
+                </p>
+            </template>
+
+            <template lwc:if={selectedTemplate}>
+                <div class="selection-summary">
+                    <p>
+                        Selected Template:
+                        <strong>{selectedTemplate.Name}</strong>
+                    </p>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>

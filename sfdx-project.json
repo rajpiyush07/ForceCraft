@@ -1,23 +1,12 @@
 {
   "packageDirectories": [
     {
-      "versionName": "ver 0.1",
-      "versionNumber": "0.2.0.NEXT",
       "path": "force-app",
-      "default": true,
-      "package": "Opportunity Management Dashboard",
-      "ancestorVersion": "HIGHEST",
-      "versionDescription": "Salesforce Opportunity Management Dashboard with server-side pagination, filtering, KPI metrics, stage analytics, and opportunity creation."
+      "default": true
     }
   ],
-  "name": "salesforce-opportunity-dashboard",
-  "namespace": "forcecraft07",
+  "name": "PortfolioBuilder",
+  "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "66.0",
-  "packageAliases": {
-    "Opportunity Management Dashboard": "0HoWU00000036wv0AA",
-    "Opportunity Management Dashboard@0.1.0-2": "04tWU000000XOUzYAO",
-    "Opportunity Management Dashboard@0.1.0-3": "04tWU000000XOd3YAG",
-    "Opportunity Management Dashboard@0.2.0-1": "04tWU000000XOunYAG"
-  }
+  "sourceApiVersion": "68.0"
 }

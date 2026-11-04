@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Selected_Template__c</fullName>
+    <label>Selected Template</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Professional</fullName>
+                <default>false</default>
+                <label>Professional</label>
+            </value>
+            <value>
+                <fullName>Developer</fullName>
+                <default>false</default>
+                <label>Developer</label>
+            </value>
+            <value>
+                <fullName>Creative</fullName>
+                <default>false</default>
+                <label>Creative</label>
+            </value>
+            <value>
+                <fullName>Minimal</fullName>
+                <default>false</default>
+                <label>Minimal</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -1,0 +1,143 @@
+:host {
+    display: block;
+    width: 100%;
+    max-width: 1080px;
+    margin: 28px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+/* Main card */
+lightning-card {
+    --slds-c-card-color-background: #eeeeee;
+    --slds-c-card-text-color: #292929;
+    --slds-c-card-radius-border: 14px;
+}
+
+/* Main form background */
+.slds-p-around_large {
+    background: linear-gradient(145deg, #e5e5e5, #f3eeee);
+    color: #292929;
+    padding: 24px !important;
+    border-radius: 12px;
+}
+
+/* Main heading */
+h1 {
+    color: #292929;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+/* Section headings */
+h2 {
+    color: #333333;
+    font-size: 17px;
+    font-weight: 650;
+    border-bottom: 1px solid #edc5c8;
+    padding-bottom: 9px;
+}
+
+/* Description */
+p {
+    color: #666666;
+    font-size: 13px;
+}
+
+/* Form sections */
+.slds-box {
+    background: #fafafa;
+    border: 1px solid #d4d4d4;
+    border-left: 4px solid #b8323c;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 10px rgba(40, 40, 40, 0.05);
+    transition: box-shadow 0.2s ease;
+}
+
+.slds-box:hover {
+    box-shadow: 0 5px 15px rgba(184, 50, 60, 0.09);
+}
+
+/* Input styling */
+lightning-input,
+lightning-textarea {
+    --slds-c-form-element-label-color: #333333;
+    --slds-c-input-label-text-color: #333333;
+    --slds-c-input-text-color: #292929;
+    --slds-c-input-color-background: #ffffff;
+    --slds-c-input-color-border: #c5c5c5;
+    --slds-c-input-radius-border: 6px;
+
+    --slds-c-textarea-text-color: #292929;
+    --slds-c-textarea-color-background: #ffffff;
+    --slds-c-textarea-color-border: #c5c5c5;
+    --slds-c-textarea-radius-border: 6px;
+
+    --slds-c-input-color-border-focus: #b8323c;
+}
+
+/* Save button */
+lightning-button {
+    --slds-c-button-brand-color-background: #b8323c;
+    --slds-c-button-brand-color-border: #b8323c;
+    --slds-c-button-brand-color-background-hover: #92232d;
+    --slds-c-button-brand-color-border-hover: #92232d;
+    --slds-c-button-radius-border: 7px;
+}
+
+/* Action area */
+.slds-grid_align-end {
+    padding-top: 5px;
+}
+
+/* Tablet and mobile */
+@media screen and (max-width: 768px) {
+    :host {
+        padding: 0 10px;
+        margin: 12px auto;
+    }
+
+    .slds-p-around_large {
+        padding: 14px !important;
+    }
+
+    .slds-box {
+        padding: 13px;
+        margin-bottom: 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+}
+
+
+/* Save button interaction */
+lightning-button {
+    --slds-c-button-brand-color-background: #b8323c;
+    --slds-c-button-brand-color-border: #b8323c;
+    --slds-c-button-brand-color-background-hover: #92232d;
+    --slds-c-button-brand-color-border-hover: #92232d;
+    --slds-c-button-radius-border: 7px;
+}
+
+/* Loading message */
+.slds-align_absolute-center {
+    color: #444444;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px;
+}
+
+/* Home navigation icon */
+lightning-button-icon {
+    --slds-c-button-color-border: #b8323c;
+    --slds-c-button-color-background: #ffffff;
+    --slds-c-button-text-color: #b8323c;
+    --slds-c-button-color-background-hover: #b8323c;
+    --slds-c-button-text-color-hover: #ffffff;
+}

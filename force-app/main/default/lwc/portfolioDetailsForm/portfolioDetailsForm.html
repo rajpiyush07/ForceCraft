@@ -1,0 +1,182 @@
+<template>
+    <lightning-card title="Create Your Portfolio" icon-name="standard:contact">
+        <div class="slds-p-around_large">
+
+            
+                <!-- Top Navigation -->
+                <div class="slds-grid slds-grid_align-end slds-m-bottom_medium">
+                    <lightning-button-icon
+                        icon-name="utility:home"
+                        alternative-text="Go to Home"
+                        title="Back to Home"
+                        variant="border-filled"
+                        size="large"
+                        onclick={handleGoHome}>
+                    </lightning-button-icon>
+                </div>
+
+
+            <div class="slds-m-bottom_large">
+                <h1 class="slds-text-heading_large">
+                    Let's Build Your Portfolio
+                </h1>
+                <p class="slds-text-color_weak slds-m-top_x-small">
+                    Tell us about yourself and showcase your professional journey.
+                </p>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="slds-box slds-m-bottom_large">
+                <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+                    Personal Information
+                </h2>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input
+                            label="Full Name"
+                            name="fullName"
+                            data-field="fullName"
+                            value={formData.fullName}
+                            onchange={handleChange}
+                            required>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input
+                            label="Professional Title"
+                            name="jobTitle"
+                            data-field="jobTitle"
+                            value={formData.jobTitle}
+                            onchange={handleChange}
+                            placeholder="e.g. Salesforce Developer"
+                            required>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input
+                            type="email"
+                            label="Email Address"
+                            name="email"
+                            data-field="email"
+                            value={formData.email}
+                            onchange={handleChange}
+                            required>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input
+                            type="tel"
+                            label="Phone Number"
+                            name="phone"
+                            data-field="phone"
+                            value={formData.phone}
+                            onchange={handleChange}>
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1">
+                        <lightning-textarea
+                            label="About Me"
+                            name="aboutMe"
+                            data-field="aboutMe"
+                            value={formData.aboutMe}
+                            onchange={handleChange}
+                            placeholder="Write a short professional introduction..."
+                            required>
+                        </lightning-textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Profile Image -->
+            <div class="slds-box slds-m-bottom_large">
+                <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+                    Profile Image
+                </h2>
+
+                <lightning-input
+                    type="url"
+                    label="Profile Image URL"
+                    name="profileImageUrl"
+                    data-field="profileImageUrl"
+                    value={formData.profileImageUrl}
+                    onchange={handleChange}
+                    placeholder="https://example.com/profile.jpg">
+                </lightning-input>
+            </div>
+
+            <!-- Social Links -->
+            <div class="slds-box slds-m-bottom_large">
+                <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+                    Social Media Links
+                </h2>
+
+                <div class="slds-grid slds-wrap slds-gutters">
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input
+                            type="url"
+                            label="LinkedIn URL"
+                            name="linkedinUrl"
+                            data-field="linkedinUrl"
+                            value={formData.linkedinUrl}
+                            onchange={handleChange}
+                            placeholder="https://linkedin.com/in/username">
+                        </lightning-input>
+                    </div>
+
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2">
+                        <lightning-input
+                            type="url"
+                            label="GitHub URL"
+                            name="githubUrl"
+                            data-field="githubUrl"
+                            value={formData.githubUrl}
+                            onchange={handleChange}
+                            placeholder="https://github.com/username">
+                        </lightning-input>
+                    </div>
+
+                </div>
+            </div>
+
+            
+                    
+                
+            <!-- Save Portfolio Action -->
+            <div class="slds-grid slds-grid_align-end slds-m-top_large">
+
+                <lightning-button
+                    variant="brand"
+                    label="Save Portfolio"
+                    icon-name="utility:save"
+                    onclick={handleSubmit}
+                    disabled={isSaving}>
+                </lightning-button>
+
+            </div>
+
+            <!-- Loading Indicator -->
+            <template lwc:if={isSaving}>
+                <div class="slds-m-top_medium slds-align_absolute-center">
+                    <lightning-spinner
+                        alternative-text="Creating your portfolio..."
+                        size="medium">
+                    </lightning-spinner>
+                    <span class="slds-m-left_small">
+                        Creating your portfolio...
+                    </span>
+                </div>
+            </template>
+
+
+
+        </div>
+    </lightning-card>
+</template>
